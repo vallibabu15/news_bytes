@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- వాట్సాప్ ప్రివ్యూ సెట్టింగ్స్ -->
+    <!-- పక్కా ప్రివ్యూ సెట్టింగ్స్ -->
     <title>News Bytes</title>
     <meta property="og:site_name" content="News Bytes">
     <meta property="og:title" content="News Bytes | తాజా వార్తలు క్షణాల్లో..">
@@ -14,15 +14,21 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
+        :root { --header-h: 70px; --footer-h: 75px; }
         html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: Arial, sans-serif; background: #000; overflow: hidden; touch-action: none; }
+        
         .main-container { width: 100%; height: 100vh; display: flex; flex-direction: column; background: #fff; }
 
-        /* బ్యానర్ - పక్కా ఫుల్ విడ్త్ */
-        .top-header { width: 100%; background: #fff; z-index: 100; line-height: 0; overflow: hidden; }
-        .top-header img { width: 100%; height: auto; display: block; margin: 0 auto; }
+        /* 1. బ్యానర్ - ఫోన్ మోడల్ ని బట్టి ఆటోమేటిక్ విడ్త్ */
+        .top-header { height: var(--header-h); width: 100%; background: #fff; z-index: 100; line-height: 0; overflow: hidden; border-bottom: 1px solid #eee; }
+        .top-header img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-        /* 3D Cube Viewport */
-        .slider-viewport { width: 100%; flex-grow: 1; position: relative; overflow: hidden; background: #000; perspective: 1500px; }
+        /* 2. 3D క్యూబ్ ఏరియా - స్క్రీన్ నిండుగా అడ్జస్ట్ అవుతుంది */
+        .slider-viewport { 
+            height: calc(100vh - var(--header-h) - var(--footer-h)); 
+            width: 100%; position: relative; overflow: hidden; background: #fff; perspective: 1500px; 
+        }
+
         #slider-track { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
 
         .news-card { 
@@ -30,47 +36,45 @@
             border-top: 1px solid #111; border-bottom: 1px solid #111; box-sizing: border-box;
         }
         
-        .news-media { width: 100%; height: 38%; background: #000; overflow: hidden; }
+        .news-media { width: 100%; height: 42%; background: #000; overflow: hidden; }
         .news-media img, .news-media video { width: 100%; height: 100%; object-fit: cover; }
 
-        /* వార్త కంటెంట్ - స్క్రీన్ నిండుగా */
+        /* 3. వార్త కంటెంట్ కాలిక్యులేషన్ */
         .news-content { padding: 12px 15px; flex-grow: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; }
         .news-title { font-size: 19px; color: #ff0000; font-weight: bold; margin: 0 0 8px 0; line-height: 1.3; }
-        .news-desc { font-size: 16px; color: #333; line-height: 1.6; text-align: justify; margin: 0; flex-grow: 1; }
+        .news-desc { font-size: 16.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0; flex-grow: 1; }
         .news-desc b, .news-desc strong { color: #0033cc; font-weight: 900; background: linear-gradient(to bottom, #00a2ff 0%, #0044ff 50%, #0022aa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        /* షార్ప్ బ్లింక్ - అస్సలు సాగదు */
-        @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
-
-        /* "ఇంకా చదవండి" - బటన్ల పైన లాక్ చేసాను */
+        /* 4. ఇంకా చదవండి - సరిగ్గా బటన్ల పైన ఫిక్స్ */
+        @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.05; } }
         .read-more-btn {
-            position: absolute; bottom: 10px; left: 15px;
+            position: absolute; bottom: 8px; left: 15px;
             background: none; border: none; padding: 0;
             font-size: 18px; font-weight: 900; color: #ff0000; cursor: pointer;
             animation: sharp-blink 1.2s infinite ease-in-out;
         }
 
-        /* కింద మెయిన్ బటన్లు - గంట సింబల్ పెద్దది */
-        .bottom-actions { background: #fff; padding: 5px 0 10px 0; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
+        /* 5. కింద మెనూ - పక్కా కాలిక్యులేటెడ్ */
+        .bottom-actions { 
+            height: var(--footer-h); background: #fff; padding: 0; border-top: 1px solid #eee; 
+            display: flex; justify-content: space-around; align-items: center; z-index: 50; 
+        }
         .btn-action { border: none; background: none; text-align: center; color: #444; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; align-items: center; width: 25%; cursor: pointer; }
-        
-        .btn-icon { width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; margin-bottom: -1px; font-size: 28px; }
+        .btn-icon { width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; margin-bottom: -2px; font-size: 28px; }
         
         /* భారీ గంట (Big Bell) */
-        .bell-icon { font-size: 40px !important; width: 45px; height: 45px; margin-bottom: 2px; }
+        .bell-icon { font-size: 44px !important; width: 48px; height: 48px; margin-bottom: 3px; }
 
         .wa-c { color: #075E54; } /* థిక్ డార్క్ గ్రీన్ */
         .yt-c { color: #FF0000; } 
         .sh-c { color: #0022bb; }
 
-        /* గంట బ్లింక్ */
         .not-following .bell-icon { color: #ff0000; animation: sharp-blink 1.2s infinite ease-in-out; }
         .is-following .bell-icon { color: #000; animation: none; }
 
         #full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; display: none; overflow-y: auto; }
         .close-view { position: fixed; top: 15px; right: 15px; background: #ff0000; color: #fff; width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 24px; z-index: 2100; display: flex; justify-content: center; align-items: center; animation: sharp-blink 1s infinite ease-in-out; }
-
-        #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 25px; display: none; z-index: 1000; font-size: 13px; }
+        #toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 25px; display: none; z-index: 1000; font-size: 13px; }
     </style>
 </head>
 <body>
@@ -112,8 +116,8 @@
             const card = document.createElement("div"); card.className = "news-card";
             card.style.transform = `rotateX(${index * -90}deg) translateZ(${h / 2}px)`;
             
-            // వార్త కార్డు పొడవును బట్టి ఆటోమేటిక్ పదాల అడ్జస్ట్మెంట్
-            let shortDesc = data.desc.length > 500 ? data.desc.substring(0, 450) + "..." : data.desc;
+            // వార్త పొడవును బట్టి ఆటోమేటిక్ అడ్జస్ట్మెంట్
+            let shortDesc = data.desc.length > 550 ? data.desc.substring(0, 500) + "..." : data.desc;
 
             card.innerHTML = `<div class="news-media">${data.mediaType === 'video' ? `<video src="${data.mediaUrl}" loop muted playsinline></video>` : `<img src="${data.mediaUrl}">`}</div>
                 <div class="news-content"><h2 class="news-title">${data.title}</h2><div class="news-desc">${shortDesc}</div>
@@ -156,12 +160,11 @@
     document.addEventListener("touchend", (e) => { if (!isMoving) return; isMoving = false; const deltaY = startY - e.changedTouches[0].clientY; if (Math.abs(deltaY) > 60) { if (deltaY > 0 && currentIndex < newsList.length - 1) currentIndex++; else if (deltaY < 0 && currentIndex > 0) currentIndex--; updateBottomActions(); } updateRotation(0); });
 
     window.goShare = (title) => {
-        const liveLink = "https://vallibabu15.github.io/news_bytes/";
+        const liveLink = "https://vallibabu15.github.io/news_bytes/?v=NB";
         const text = "NB | " + title + "\n\nవార్త ఇక్కడ చూడండి: " + liveLink;
         if (navigator.share) { navigator.share({ title: 'News Bytes', text: text }).catch(console.error); }
         else { navigator.clipboard.writeText(text); showToast("NB | లింక్ కాపీ అయ్యింది ✓"); }
     };
-
     function showToast(msg) { const t = document.getElementById("toast"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2500); }
 </script>
 </body>
