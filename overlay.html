@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praja Spandana News Overlay</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #00FF00; overflow: hidden; font-family: 'Arial', sans-serif; }
+        .logo-bug { position: absolute; top: 20px; right: 20px; width: 130px; background: white; padding: 8px; border-radius: 10px; border-bottom: 5px solid #ff0000; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        .logo-bug img { width: 100%; height: auto; }
+        .news-footer { position: absolute; bottom: 0; width: 100%; height: 110px; display: flex; flex-direction: column; }
+        .breaking-bar { background: linear-gradient(90deg, #ff0000 0%, #800000 100%); height: 55px; display: flex; align-items: center; color: white; font-weight: bold; border-top: 2px solid #ffd700; overflow: hidden; position: relative; }
+        .breaking-label { background: #fff; color: #ff0000; padding: 5px 15px; font-size: 20px; z-index: 10; box-shadow: 5px 0 10px rgba(0,0,0,0.3); white-space: nowrap; height: 100%; display: flex; align-items: center; }
+        .main-headline-wrap { flex-grow: 1; overflow: hidden; white-space: nowrap; }
+        .main-headline-text { display: inline-block; padding-left: 100%; font-size: 28px; animation: scroll-main 15s linear infinite; }
+        .ticker-bar { background: rgba(0, 0, 40, 0.95); height: 40px; display: flex; align-items: center; border-top: 1px solid #444; }
+        .time-box { background: #ffd700; color: #000; padding: 0 15px; height: 100%; display: flex; align-items: center; font-weight: bold; font-size: 18px; z-index: 10; }
+        .ticker-wrap { flex-grow: 1; overflow: hidden; white-space: nowrap; }
+        .ticker-text { display: inline-block; padding-left: 100%; color: white; font-size: 20px; animation: scroll-ticker 25s linear infinite; }
+        @keyframes scroll-main { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        @keyframes scroll-ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        .location-box { position: absolute; bottom: 110px; left: 0; background: #ff0000; color: white; padding: 6px 20px; font-weight: bold; font-size: 20px; border-right: 6px solid #ffd700; }
+    </style>
+</head>
+<body>
+    <div class="logo-bug">
+        <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+    </div>
+    <div class="location-box" id="locBox">లైవ్</div>
+    <div class="news-footer">
+        <div class="breaking-bar">
+            <div class="breaking-label">BREAKING NEWS</div>
+            <div class="main-headline-wrap">
+                <div class="main-headline-text" id="headline">ప్రజా స్పందన వార్తలు: తాజా సమాచారం కోసం మా యూట్యూబ్ ఛానల్‌ను సబ్‌స్క్రైబ్ చేయండి.. అక్షర రూపంలో వార్తల కోసం మా వెబ్‌సైట్‌ను సందర్శించండి..</div>
+            </div>
+        </div>
+        <div class="ticker-bar">
+            <div class="time-box" id="clock">12:00 PM</div>
+            <div class="ticker-wrap"><div class="ticker-text">| తాజా అప్‌డేట్స్ నిరంతరం మీ ముందుకు.. ప్రజా స్పందన - ప్రజల గొంతుక మా స్పందన |</div></div>
+        </div>
+    </div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('clock').innerText = hours + ':' + minutes + ' ' + ampm;
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('loc')) document.getElementById('locBox').innerText = params.get('loc');
+        if(params.has('head')) document.getElementById('headline').innerText = params.get('head');
+    </script>
+</body>
+</html>
