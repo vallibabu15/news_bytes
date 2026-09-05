@@ -1,1 +1,1013 @@
+<!DOCTYPE html>
+<html lang="te">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>NB Master Admin - News Bytes</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+<style>
+
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top-header {
+    width: 100%;
+    max-width: 500px;
+    background: #fff;
+    line-height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.top-header img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.admin-card {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 20px;
+    padding: 25px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-top: 6px solid #ff0000;
+    position: relative;
+}
+
+.close-icon {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    color: #888;
+    cursor: pointer;
+}
+
+h2 {
+    color: #d32f2f;
+    font-size: 22px;
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+.toolbar {
+    margin-bottom: 5px;
+}
+
+.tool-btn {
+    background: #0044ff;
+    color: white;
+    border: none;
+    padding: 6px 15px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-file {
+    border: 2px dashed #bbb;
+    color: #666;
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.post-btn {
+    background: #ff0000;
+    color: white;
+    border: none;
+    padding: 16px;
+    width: 100%;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    box-shadow: 0 4px 15px rgba(255,0,0,0.2);
+    transition: 0.3s;
+}
+
+.post-btn:disabled {
+    background: #ccc;
+    box-shadow: none;
+}
+
+.news-list-container {
+    width: 100%;
+    max-width: 480px;
+    margin-top: 30px;
+}
+
+.news-item {
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 5px solid #ff0000;
+}
+
+.news-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.news-info span {
+    font-weight: bold;
+    color: #333;
+    font-size: 15px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.item-actions {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.wa-icon {
+    color: #075E54;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.edit-icon {
+    color: #0044ff;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.del-icon {
+    color: #ff0000;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+#status {
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-weight: bold;
+    display: none;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="top-header">
+
+<img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+
+</div>
+
+
+<div class="admin-card">
+
+<i class="fas fa-sync close-icon"
+onclick="location.reload()">
+</i>
+
+
+<h2 id="formTitle">
+కొత్త వార్త పోస్ట్ చేయండి
+</h2>
+
+
+<div class="form-group">
+
+<label>
+మీడియా (ఫోటో / వీడియో)
+</label>
+
+
+<input
+type="file"
+id="newsMedia"
+accept="image/*,video/*"
+style="display:none"
+onchange="
+document.getElementById('fileName').innerText =
+this.files[0].name
+">
+
+
+<div
+class="btn-file"
+onclick="document.getElementById('newsMedia').click()"
+id="fileName">
+
+క్లిక్ చేసి మీడియా ఎంచుకోండి
+
+</div>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+వార్త శీర్షిక (Title)
+</label>
+
+<input
+type="text"
+id="newsTitle"
+placeholder="వార్త హెడ్డింగ్ రాయండి...">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+అలెర్ట్ సారాంశం
+(Summary - నోటిఫికేషన్ కోసం)
+</label>
+
+<input
+type="text"
+id="newsSummary"
+placeholder="ఫోన్ పైన కనిపించే చిన్న మేటర్...">
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+పూర్తి వివరణ (Description)
+</label>
+
+
+<div class="toolbar">
+
+<button
+class="tool-btn"
+onclick="makeBold()">
+
+Bold (బ్లూ హైలైట్)
+
+</button>
+
+</div>
+
+
+<textarea
+id="newsDesc"
+placeholder="వార్త పూర్తి వివరాలు ఇక్కడ రాయండి...">
+</textarea>
+
+</div>
+
+
+<button
+class="post-btn"
+id="postBtn">
+
+పబ్లిష్ & అలెర్ట్ పంపు
+
+</button>
+
+
+<div id="status"></div>
+
+</div>
+
+
+<div class="news-list-container">
+
+<h3
+style="
+text-align:center;
+color:#666;
+font-size:16px;
+">
+
+ఇప్పటివరకు వేసిన వార్తలు
+(Edit/Delete/Share)
+
+</h3>
+
+
+<div id="newsList"></div>
+
+</div>
+
+
+<script type="module">
+
+
+import {
+    initializeApp
+} from
+"https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp,
+    query,
+    orderBy,
+    onSnapshot,
+    doc,
+    deleteDoc,
+    updateDoc
+} from
+"https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+
+    apiKey:
+        "AIzaSyDQJ0x2mFZqoCgiE_34fg9WxomurFWoopg",
+
+    authDomain:
+        "newsbytes-848a9.firebaseapp.com",
+
+    projectId:
+        "newsbytes-848a9",
+
+    storageBucket:
+        "newsbytes-848a9.firebasestorage.app",
+
+    messagingSenderId:
+        "26695955001",
+
+    appId:
+        "1:26695955001:web:0c25b74d7a849f4a9d13e8"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const db =
+    getFirestore(app);
+
+
+let editID = null;
+
+
+/* =========================
+   BOLD
+========================= */
+
+window.makeBold = () => {
+
+    const area =
+        document.getElementById(
+            'newsDesc'
+        );
+
+    const start =
+        area.selectionStart;
+
+    const end =
+        area.selectionEnd;
+
+    const sel =
+        area.value.substring(
+            start,
+            end
+        );
+
+
+    if (sel) {
+
+        area.value =
+            area.value.substring(
+                0,
+                start
+            )
+            +
+            "<b>"
+            +
+            sel
+            +
+            "</b>"
+            +
+            area.value.substring(
+                end
+            );
+    }
+
+};
+
+
+/* =========================
+   NEWS LIST
+========================= */
+
+onSnapshot(
+
+    query(
+        collection(db, "news"),
+        orderBy(
+            "timestamp",
+            "desc"
+        )
+    ),
+
+    (snapshot) => {
+
+        const container =
+            document.getElementById(
+                'newsList'
+            );
+
+
+        container.innerHTML = "";
+
+
+        snapshot.forEach(
+            newsDoc => {
+
+                const data =
+                    newsDoc.data();
+
+
+                const cleanTitle =
+                    (data.title || "")
+                    .replace(
+                        /'/g,
+                        ""
+                    );
+
+
+                const item =
+                    document.createElement(
+                        'div'
+                    );
+
+
+                item.className =
+                    "news-item";
+
+
+                item.innerHTML = `
+
+                    <div class="news-info">
+
+                        <span>
+                            ${cleanTitle}
+                        </span>
+
+                    </div>
+
+
+                    <div class="item-actions">
+
+                        <i
+                            class="fab fa-whatsapp wa-icon"
+                            onclick="shareWA('${cleanTitle}')">
+                        </i>
+
+
+                        <i
+                            class="fas fa-edit edit-icon"
+                            onclick="editNews(
+                                '${newsDoc.id}',
+                                '${cleanTitle}',
+                                \`${(data.desc || "").replace(/`/g, "'")}\`,
+                                '${(data.summary || "").replace(/'/g, "")}'
+                            )">
+                        </i>
+
+
+                        <i
+                            class="fas fa-trash-alt del-icon"
+                            onclick="deleteNews('${newsDoc.id}')">
+                        </i>
+
+                    </div>
+                `;
+
+
+                container.appendChild(
+                    item
+                );
+
+            }
+        );
+    }
+);
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+window.shareWA = (title) => {
+
+    const liveLink =
+        "https://vallibabu15.github.io/news_bytes/";
+
+
+    const text =
+        encodeURIComponent(
+
+            `NB | *${title}*
+
+వార్త ఇక్కడ చూడండి:
+${liveLink}`
+
+        );
+
+
+    window.open(
+        `https://api.whatsapp.com/send?text=${text}`,
+        '_blank'
+    );
+};
+
+
+/* =========================
+   EDIT
+========================= */
+
+window.editNews =
+(
+    id,
+    title,
+    desc,
+    summary
+) => {
+
+    editID = id;
+
+
+    document.getElementById(
+        'newsTitle'
+    ).value = title;
+
+
+    document.getElementById(
+        'newsDesc'
+    ).value = desc;
+
+
+    document.getElementById(
+        'newsSummary'
+    ).value = summary;
+
+
+    document.getElementById(
+        'postBtn'
+    ).innerText =
+        "వార్తను అప్‌డేట్ చేయి";
+
+
+    document.getElementById(
+        'formTitle'
+    ).innerText =
+        "వార్తను సవరించండి";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+
+};
+
+
+/* =========================
+   DELETE
+========================= */
+
+window.deleteNews =
+async (id) => {
+
+    if (
+        confirm(
+            "ఈ వార్తను తీసివేయాలా?"
+        )
+    ) {
+
+        await deleteDoc(
+            doc(
+                db,
+                "news",
+                id
+            )
+        );
+    }
+};
+
+
+/* =========================
+   PUBLISH
+========================= */
+
+document.getElementById(
+    'postBtn'
+).addEventListener(
+    'click',
+    async () => {
+
+
+        const mediaFile =
+            document.getElementById(
+                'newsMedia'
+            ).files[0];
+
+
+        const title =
+            document.getElementById(
+                'newsTitle'
+            ).value.trim();
+
+
+        const summary =
+            document.getElementById(
+                'newsSummary'
+            ).value.trim();
+
+
+        const desc =
+            document.getElementById(
+                'newsDesc'
+            ).value.trim();
+
+
+        const btn =
+            document.getElementById(
+                'postBtn'
+            );
+
+
+        const status =
+            document.getElementById(
+                'status'
+            );
+
+
+        if (!title || !desc) {
+
+            alert(
+                "టైటిల్ మరియు వివరాలు రాయండి!"
+            );
+
+            return;
+        }
+
+
+        btn.disabled = true;
+
+
+        status.style.display =
+            "block";
+
+        status.style.color =
+            "blue";
+
+        status.innerText =
+            "ప్రాసెస్ అవుతోంది...";
+
+
+        try {
+
+
+            let mediaUrl = "";
+
+            let mediaType = "image";
+
+
+            /* =====================
+               CLOUDINARY
+            ===================== */
+
+            if (mediaFile) {
+
+                const formData =
+                    new FormData();
+
+
+                formData.append(
+                    "file",
+                    mediaFile
+                );
+
+
+                formData.append(
+                    "upload_preset",
+                    "Newsbytes"
+                );
+
+
+                const res =
+                    await fetch(
+
+                        `https://api.cloudinary.com/v1_1/cx4ru5e5/${
+                            mediaFile.type.includes('video')
+                            ? 'video'
+                            : 'image'
+                        }/upload`,
+
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+
+                    );
+
+
+                const cloudData =
+                    await res.json();
+
+
+                if (!res.ok ||
+                    !cloudData.secure_url) {
+
+                    throw new Error(
+                        "Cloudinary upload failed"
+                    );
+                }
+
+
+                mediaUrl =
+                    cloudData.secure_url;
+
+
+                mediaType =
+                    mediaFile.type.includes(
+                        'video'
+                    )
+                    ? 'video'
+                    : 'image';
+            }
+
+
+            /* =====================
+               EDIT
+            ===================== */
+
+            if (editID) {
+
+
+                const updateData = {
+                    title,
+                    desc,
+                    summary
+                };
+
+
+                if (mediaUrl) {
+
+                    updateData.mediaUrl =
+                        mediaUrl;
+
+                    updateData.mediaType =
+                        mediaType;
+                }
+
+
+                await updateDoc(
+
+                    doc(
+                        db,
+                        "news",
+                        editID
+                    ),
+
+                    updateData
+                );
+
+
+                status.innerText =
+                    "వార్త అప్‌డేట్ అయింది! 🏆";
+
+            }
+
+
+            /* =====================
+               NEW NEWS
+            ===================== */
+
+            else {
+
+
+                if (!mediaFile) {
+
+                    alert(
+                        "మీడియా తప్పనిసరి!"
+                    );
+
+                    btn.disabled = false;
+
+                    status.style.display =
+                        "none";
+
+                    return;
+                }
+
+
+                const newsRef =
+                    await addDoc(
+
+                        collection(
+                            db,
+                            "news"
+                        ),
+
+                        {
+                            title,
+                            desc,
+                            summary,
+                            mediaUrl,
+                            mediaType,
+                            timestamp:
+                                serverTimestamp()
+                        }
+                    );
+
+
+                /* =========================
+                   NOTIFICATION REQUEST
+                ========================= */
+
+                await addDoc(
+
+                    collection(
+                        db,
+                        "notificationRequests"
+                    ),
+
+                    {
+                        title:
+                            "NB | " + title,
+
+                        body:
+                            summary ||
+                            "తాజా వార్త క్లిక్ చేసి చూడండి",
+
+                        image:
+                            mediaUrl || "",
+
+                        url:
+                            "https://vallibabu15.github.io/news_bytes/",
+
+                        newsId:
+                            newsRef.id,
+
+                        createdAt:
+                            serverTimestamp(),
+
+                        status:
+                            "pending"
+                    }
+                );
+
+
+                status.innerText =
+                    "వార్త పోస్ట్ అయింది & అలెర్ట్ అభ్యర్థన పంపబడింది! 🏆";
+            }
+
+
+            /* =====================
+               RESET
+            ===================== */
+
+            document.getElementById(
+                'newsTitle'
+            ).value = "";
+
+
+            document.getElementById(
+                'newsDesc'
+            ).value = "";
+
+
+            document.getElementById(
+                'newsSummary'
+            ).value = "";
+
+
+            document.getElementById(
+                'newsMedia'
+            ).value = "";
+
+
+            document.getElementById(
+                'fileName'
+            ).innerText =
+                "మీడియా ఎంచుకోండి";
+
+
+            btn.innerText =
+                "పబ్లిష్ & అలెర్ట్ పంపు";
+
+
+            editID = null;
+
+
+        }
+
+        catch (e) {
+
+            console.error(e);
+
+
+            status.style.color =
+                "red";
+
+
+            status.innerText =
+                "Error! మళ్ళీ ప్రయత్నించండి.";
+
+        }
+
+
+        finally {
+
+            btn.disabled = false;
+
+
+            setTimeout(
+                () => {
+                    status.style.display =
+                        "none";
+                },
+                4000
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+</html>
