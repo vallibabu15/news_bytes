@@ -1,1 +1,174 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
+    <title>News Bytes</title>
+    <meta property="og:site_name" content="News Bytes">
+    <meta property="og:title" content="News Bytes | తాజా వార్తలు క్షణాల్లో..">
+    <meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- OneSignal Web Push SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: "76c6f912-be9e-4f6c-b07e-dc2c4658573f",
+        });
+      });
+    </script>
+
+    <style>
+        :root { --h-h: 65px; --f-h: 80px; }
+        html, body { margin: 0; padding: 0; width: 100%; height: 100%; font-family: Arial, sans-serif; background: #000; overflow: hidden; touch-action: none; }
+        .main-container { width: 100%; height: 100dvh; display: flex; flex-direction: column; background: #fff; }
+
+        .top-header { height: var(--h-h); width: 100%; background: #fff; z-index: 100; overflow: hidden; border-bottom: 1px solid #eee; }
+        .top-header img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        .slider-viewport { flex-grow: 1; position: relative; overflow: hidden; background: #000; perspective: 1800px; }
+        #slider-track { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
+
+        .news-card { 
+            position: absolute; width: 100%; height: 100%; background: #fff; backface-visibility: hidden; display: flex; flex-direction: column;
+            border-top: 1px solid #111; border-bottom: 1px solid #111; box-sizing: border-box;
+        }
+        
+        .news-media { width: 100%; height: 42%; background: #000; overflow: hidden; }
+        .news-media img, .news-media video { width: 100%; height: 100%; object-fit: cover; }
+
+        .news-content { padding: 12px 15px; flex-grow: 1; overflow: hidden; position: relative; display: flex; flex-direction: column; }
+        .news-title { font-size: 19px; color: #ff0000; font-weight: bold; margin: 0 0 8px 0; line-height: 1.3; }
+        .news-desc { font-size: 16.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0; flex-grow: 1; }
+        .news-desc b { color: #0033cc; font-weight: 900; background: linear-gradient(to bottom, #00a2ff 0%, #0044ff 50%, #0022aa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
+
+        .read-more-btn {
+            position: absolute; bottom: 8px; left: 15px; background: none; border: none; padding: 0;
+            font-size: 18px; font-weight: 900; color: #ff0000; cursor: pointer;
+            animation: sharp-blink 1.2s infinite ease-in-out;
+        }
+
+        .bottom-actions { height: var(--f-h); background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); }
+        .btn-action { border: none; background: none; text-align: center; color: #444; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; align-items: center; width: 25%; }
+        .btn-icon { width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; margin-bottom: -2px; font-size: 28px; }
+        
+        .bell-icon { font-size: 40px !important; color: #ff0000; animation: sharp-blink 1.2s infinite; }
+        .is-following .bell-icon { color: #000; animation: none; }
+        .wa-c { color: #075E54; } .yt-c { color: #FF0000; } .sh-c { color: #0022bb; }
+
+        #full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; display: none; overflow-y: auto; padding: 15px; box-sizing: border-box; }
+        .close-view { position: fixed; top: 15px; right: 15px; background: #ff0000; color: #fff; width: 45px; height: 45px; border-radius: 50%; border: none; font-size: 24px; animation: sharp-blink 1s infinite; z-index: 2101; }
+        #toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 10px 20px; border-radius: 25px; display: none; z-index: 1000; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="top-header"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png"></div>
+        <div class="slider-viewport"><div id="slider-track"></div></div>
+        <div class="bottom-actions" id="global-actions"></div>
+    </div>
+    <div id="full-view"><button class="close-view" onclick="closeFullNews()"><i class="fas fa-times"></i></button><div id="full-view-content" style="margin-top:50px;"></div></div>
+    <div id="toast"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyDQJ0x2mFZqoCgiE_34fg9WxomurFWoopg", authDomain: "newsbytes-848a9.firebaseapp.com", projectId: "newsbytes-848a9", storageBucket: "newsbytes-848a9.firebasestorage.app", messagingSenderId: "26695955001", appId: "1:26695955001:web:0c25b74d7a849f4a9d13e8" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let newsList = []; let currentIndex = 0;
+    const track = document.getElementById("slider-track");
+    const bottomActions = document.getElementById("global-actions");
+    window.isUserFollowing = localStorage.getItem("news_following") === "true";
+
+    // OneSignal Subscription Status Check
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(async function(OneSignal) {
+        if (OneSignal.User.PushSubscription.optedIn) {
+            window.isUserFollowing = true;
+            localStorage.setItem("news_following", "true");
+            updateBottomActions();
+        }
+        OneSignal.User.PushSubscription.addEventListener("change", (e) => {
+            window.isUserFollowing = !!e.current.optedIn;
+            localStorage.setItem("news_following", window.isUserFollowing ? "true" : "false");
+            updateBottomActions();
+        });
+    });
+
+    onSnapshot(query(collection(db, "news"), orderBy("timestamp", "desc")), (snapshot) => {
+        newsList = []; snapshot.forEach(doc => newsList.push({ id: doc.id, ...doc.data() })); renderCube();
+    });
+
+    function renderCube() {
+        track.innerHTML = ""; const h = track.offsetHeight;
+        newsList.forEach((data, index) => {
+            const card = document.createElement("div"); card.className = "news-card";
+            card.style.transform = `rotateX(${index * -90}deg) translateZ(${h / 2}px)`;
+            let shortDesc = data.desc.length > 550 ? data.desc.substring(0, 520) + "..." : data.desc;
+            card.innerHTML = `<div class="news-media">${data.mediaType === 'video' ? `<video src="${data.mediaUrl}" loop muted playsinline></video>` : `<img src="${data.mediaUrl}">`}</div>
+                <div class="news-content"><h2 class="news-title">${data.title}</h2><div class="news-desc">${shortDesc}</div>
+                <button class="read-more-btn" onclick="openFullNews(${index})">ఇంకా చదవండి...</button></div>`;
+            track.appendChild(card);
+        });
+        updateBottomActions(); updateRotation(0);
+    }
+
+    function updateBottomActions() {
+        if (!newsList[currentIndex]) return;
+        const data = newsList[currentIndex];
+        bottomActions.innerHTML = `<button class="btn-action" onclick="goShare('${data.title.replace(/'/g,"")}')"><i class="fab fa-whatsapp btn-icon wa-c"></i><span>వాట్సాప్</span></button>
+            <button class="btn-action" onclick="window.open('https://www.youtube.com')"><i class="fab fa-youtube btn-icon yt-c"></i><span>యూట్యూబ్</span></button>
+            <button class="btn-action" onclick="goShare('${data.title.replace(/'/g,"")}')"><i class="fas fa-share-alt btn-icon sh-c"></i><span>షేర్</span></button>
+            <button class="btn-action ${window.isUserFollowing?'is-following':''}" onclick="handleBell()"><i class="fas fa-bell btn-icon bell-icon"></i><span>${window.isUserFollowing?'ఫాలోయింగ్':'ఫాలో'}</span></button>`;
+    }
+
+    // Single Click Direct Follow
+    window.handleBell = async () => {
+        try {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                await OneSignal.Notifications.requestPermission();
+                await OneSignal.User.PushSubscription.optIn();
+                window.isUserFollowing = true;
+                localStorage.setItem("news_following", "true");
+                showToast("NB | అలెర్ట్స్ ఆన్ అయ్యాయి!");
+                updateBottomActions();
+            });
+        } catch (e) { 
+            console.error(e); 
+            alert("నోటిఫికేషన్ పర్మిషన్ ఇవ్వాలి!");
+        }
+    };
+
+    window.openFullNews = (index) => {
+        const data = newsList[index];
+        document.getElementById("full-view-content").innerHTML = `<img src="${data.mediaUrl}" style="width:100%; border-radius:10px;"><h2 style="color:#ff0000; font-size:20px; margin-top:20px;">NB | ${data.title}</h2><div style="font-size:16px; line-height:1.8; color:#333;">${data.desc}</div>`;
+        document.getElementById("full-view").style.display = "block";
+    };
+    window.closeFullNews = () => document.getElementById("full-view").style.display = "none";
+
+    let startY = 0; let isMoving = false;
+    function updateRotation(extraDeg) { track.style.transform = `translateZ(-${track.offsetHeight / 2}px) rotateX(${(currentIndex * 90) + extraDeg}deg)`; }
+    document.addEventListener("touchstart", (e) => { startY = e.touches[0].clientY; isMoving = true; }, {passive: true});
+    document.addEventListener("touchmove", (e) => { if (!isMoving) return; const deltaY = startY - e.touches[0].clientY; if (Math.abs(deltaY) > 10) updateRotation((deltaY / window.innerHeight) * 90); }, {passive: true});
+    document.addEventListener("touchend", (e) => { if (!isMoving) return; isMoving = false; const deltaY = startY - e.changedTouches[0].clientY; if (Math.abs(deltaY) > 60) { if (deltaY > 0 && currentIndex < newsList.length - 1) currentIndex++; else if (deltaY < 0 && currentIndex > 0) currentIndex--; updateBottomActions(); } updateRotation(0); });
+
+    window.goShare = (title) => {
+        const link = "https://vallibabu15.github.io/news_bytes/";
+        const text = "NB | " + title + "\n\nవార్త ఇక్కడ చూడండి: " + link;
+        if (navigator.share) { navigator.share({ title: 'News Bytes', text: text }).catch(console.error); }
+        else { navigator.clipboard.writeText(text); showToast("NB | లింక్ కాపీ అయ్యింది ✓"); }
+    };
+    function showToast(msg) { const t = document.getElementById("toast"); t.innerText = msg; t.style.display = "block"; setTimeout(() => t.style.display = "none", 2500); }
+</script>
+</body>
+</html>
