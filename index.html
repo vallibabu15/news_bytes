@@ -1,1 +1,633 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
+    <title>News Bytes</title>
+    <meta property="og:site_name" content="News Bytes">
+    <meta property="og:title" content="News Bytes | తాజా వార్తలు క్షణాల్లో..">
+    <meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+
+    <link rel="preconnect" href="https://firestore.googleapis.com">
+    <link rel="preconnect" href="https://res.cloudinary.com">
+    <link rel="preconnect" href="https://cdn.onesignal.com">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- OneSignal SDK -->
+    <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        try {
+          await OneSignal.init({
+            appId: "76c6f912-be9e-4f6c-b07e-dc2c4658573f",
+          });
+        } catch(e) {}
+      });
+    </script>
+
+    <style>
+        :root { --h-h: 58px; --f-h: 68px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: Arial, sans-serif; background: #000; overflow: hidden; touch-action: none;
+        }
+        .main-container {
+            width: 100%; height: 100%; display: flex; flex-direction: column; background: #fff; overflow: hidden;
+        }
+
+        .top-header { height: var(--h-h); width: 100%; background: #fff; z-index: 100; overflow: hidden; border-bottom: 1px solid #eee; flex-shrink: 0; }
+        .top-header img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        .slider-viewport {
+            flex-grow: 1; position: relative; overflow: hidden; background: #000;
+            perspective: 1400px; width: 100%;
+        }
+        #slider-track {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            transform-style: preserve-3d;
+            transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .news-card {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; backface-visibility: hidden; display: flex; flex-direction: column;
+            border-top: 1px solid #111; border-bottom: 1px solid #111; overflow: hidden;
+        }
+
+        .news-media { width: 100%; height: 46%; background: #000; overflow: hidden; flex-shrink: 0; position: relative; }
+        .news-media img, .news-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .video-wrap { position: relative; width: 100%; height: 100%; background: #000; cursor: pointer; }
+        .sound-btn {
+            position: absolute; bottom: 12px; right: 12px;
+            width: 42px; height: 42px; border-radius: 50%;
+            background: rgba(0,0,0,0.7); border: 2.5px solid #fff;
+            color: #fff; font-size: 18px; display: flex;
+            align-items: center; justify-content: center;
+            cursor: pointer; z-index: 50; pointer-events: auto !important;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+        }
+
+        .news-content {
+            padding: 12px 16px 45px 16px; flex-grow: 1; overflow: hidden;
+            position: relative; display: flex; flex-direction: column;
+        }
+        .news-title { font-size: 18.5px; color: #ff0000; font-weight: bold; margin: 0 0 8px 0; line-height: 1.35; flex-shrink: 0; }
+        .news-desc { font-size: 15.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0; overflow: hidden; flex-grow: 1; }
+        .news-desc b { color: #0033cc; font-weight: 900; }
+
+        @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
+
+        .read-more-btn {
+            position: absolute; bottom: 8px; left: 16px;
+            background: #fff; border: none; padding: 6px 12px 6px 0;
+            font-size: 17px; font-weight: 900; color: #ff0000;
+            cursor: pointer; z-index: 50; pointer-events: auto !important;
+            animation: sharp-blink 1.2s infinite ease-in-out;
+        }
+
+        .views-badge {
+            position: absolute; bottom: 10px; right: 16px;
+            font-size: 13.5px; color: #444; font-weight: bold;
+            display: flex; align-items: center; gap: 5px;
+            background: #f0f2f5; padding: 4px 10px; border-radius: 12px; z-index: 10;
+        }
+        .views-badge i { color: #0044ff; }
+
+        .bottom-actions {
+            height: var(--f-h); background: #fff; border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; align-items: center;
+            flex-shrink: 0; z-index: 100; padding-bottom: env(safe-area-inset-bottom);
+        }
+        .btn-action { border: none; background: none; text-align: center; color: #444; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; align-items: center; width: 25%; cursor: pointer; }
+        .btn-icon { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; margin-bottom: -2px; font-size: 27px; }
+
+        .bell-icon { font-size: 38px !important; color: #ff0000; animation: sharp-blink 1.2s infinite; }
+        .is-following .bell-icon { color: #000; animation: none; }
+        .wa-c { color: #075E54; } .yt-c { color: #FF0000; } .sh-c { color: #0022bb; }
+
+        #full-view {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 9999; display: none;
+            overflow-y: scroll !important; -webkit-overflow-scrolling: touch;
+            touch-action: pan-y !important; padding: 15px;
+        }
+        .close-view {
+            position: fixed; top: 15px; right: 15px; background: #ff0000;
+            color: #fff; width: 44px; height: 44px; border-radius: 50%; border: none;
+            font-size: 22px; z-index: 10000; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+        }
+        #toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 9px 20px; border-radius: 20px; display: none; z-index: 3000; font-size: 13px; white-space: nowrap; }
+
+        .fullbleed-card { background: #000 !important; }
+        .fullbleed-link { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; text-decoration: none; }
+        .fullbleed-link img { width: 100%; height: 100%; object-fit: contain; background: #000; display: block; }
+        .ad-label {
+            position: absolute; top: 14px; left: 14px; background: rgba(255,255,255,0.92);
+            color: #333; font-size: 11px; font-weight: bold; padding: 3px 10px;
+            border-radius: 4px; z-index: 20; letter-spacing: 0.5px;
+        }
+        .ad-skip-hint {
+            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.65); color: #fff; font-size: 12.5px; font-weight: bold;
+            padding: 7px 16px; border-radius: 20px; z-index: 20; white-space: nowrap;
+            animation: sharp-blink 1.4s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="top-header">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+        </div>
+        <div class="slider-viewport" id="viewport">
+            <div id="slider-track"></div>
+        </div>
+        <div class="bottom-actions" id="global-actions"></div>
+    </div>
+
+    <div id="full-view">
+        <button class="close-view" id="closeBtn"><i class="fas fa-times"></i></button>
+        <div id="full-view-content" style="margin-top:45px; padding-bottom:50px;"></div>
+    </div>
+    <div id="toast"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getFirestore, collection, query, orderBy, limit, onSnapshot, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyDQJ0x2mFZqoCgiE_34fg9WxomurFWoopg", authDomain: "newsbytes-848a9.firebaseapp.com", projectId: "newsbytes-848a9", storageBucket: "newsbytes-848a9.firebasestorage.app", messagingSenderId: "26695955001", appId: "1:26695955001:web:0c25b74d7a849f4a9d13e8" };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let newsList = [];
+    let jokesList = [];
+    let displayList = [];
+    let currentIndex = 0;
+    let cubeH = 0;
+
+    const viewport = document.getElementById("viewport");
+    const track = document.getElementById("slider-track");
+    const bottomActions = document.getElementById("global-actions");
+    const fullView = document.getElementById("full-view");
+    const fullViewContent = document.getElementById("full-view-content");
+    const closeBtn = document.getElementById("closeBtn");
+
+    let adConfig = null;
+    let jokeConfig = null;
+
+    // URL పారామీటర్లను క్లియర్‌గా చదవడం
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetNewsId = urlParams.get('id') ? urlParams.get('id').trim() : null;
+    const targetJokeId = urlParams.get('jid') ? urlParams.get('jid').trim() : null;
+
+    let targetNewsDoc = null;
+    let targetJokeDoc = null;
+
+    window.isUserFollowing = localStorage.getItem("news_following") === "true";
+
+    // 1. లింక్ ద్వారా రాకపోతేనే క్యాష్ వాడాలి (మిస్-మ్యాచ్ నివారించడానికి)
+    if (!targetNewsId && !targetJokeId) {
+        try {
+            const cachedDisplay = localStorage.getItem("nb_display_cache");
+            if (cachedDisplay) {
+                displayList = JSON.parse(cachedDisplay);
+                if (displayList.length > 0) renderCube();
+            }
+        } catch (e) {}
+    }
+
+    function getFastUrl(url, type) {
+        if (!url) return "";
+        if (url.includes("cloudinary.com") && url.includes("/upload/")) {
+            return type === "video"
+                ? url.replace("/upload/", "/upload/f_auto,q_auto,vc_auto,w_720/")
+                : url.replace("/upload/", "/upload/f_auto,q_auto,w_800/");
+        }
+        return url;
+    }
+
+    const viewedSet = new Set(JSON.parse(sessionStorage.getItem("viewed_items") || "[]"));
+    function recordView(collectionName, itemId) {
+        const key = collectionName + ":" + itemId;
+        if (!itemId || viewedSet.has(key)) return;
+        viewedSet.add(key);
+        sessionStorage.setItem("viewed_items", JSON.stringify([...viewedSet]));
+        try {
+            updateDoc(doc(db, collectionName, itemId), { views: increment(1) });
+        } catch (e) {}
+    }
+
+    function recordCurrentView() {
+        const item = displayList[currentIndex];
+        if (!item) return;
+        if (item.type === 'news') recordView('news', item.data.id);
+        else if (item.type === 'joke') recordView('jokes', item.data.id);
+    }
+
+    // OneSignal
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(async function(OneSignal) {
+        try {
+            if (OneSignal.User && OneSignal.User.PushSubscription && OneSignal.User.PushSubscription.optedIn) {
+                window.isUserFollowing = true;
+                localStorage.setItem("news_following", "true");
+                updateBottomActions();
+            }
+            if (OneSignal.User && OneSignal.User.PushSubscription) {
+                OneSignal.User.PushSubscription.addEventListener("change", (e) => {
+                    window.isUserFollowing = !!(e.current && e.current.optedIn);
+                    localStorage.setItem("news_following", window.isUserFollowing ? "true" : "false");
+                    updateBottomActions();
+                });
+            }
+        } catch(e) {}
+    });
+
+    // 2. లింక్ ద్వారా వచ్చిన వార్తను ముందుగా నేరుగా తీసుకొచ్చి మొదటి స్థానంలో పెట్టడం
+    if (targetNewsId) {
+        getDoc(doc(db, "news", targetNewsId)).then(snap => {
+            if (snap.exists()) {
+                targetNewsDoc = { id: snap.id, ...snap.data() };
+                buildDisplayList();
+                renderCube();
+                recordView('news', targetNewsDoc.id);
+            }
+        }).catch(console.error);
+    }
+
+    if (targetJokeId) {
+        getDoc(doc(db, "jokes", targetJokeId)).then(snap => {
+            if (snap.exists()) {
+                targetJokeDoc = { id: snap.id, ...snap.data() };
+                buildDisplayList();
+                renderCube();
+                recordView('jokes', targetJokeDoc.id);
+            }
+        }).catch(console.error);
+    }
+
+    async function loadConfigs() {
+        try {
+            const [adSnap, jokeSnap] = await Promise.all([
+                getDoc(doc(db, "config", "ad")),
+                getDoc(doc(db, "config", "jokes"))
+            ]);
+            if (adSnap.exists()) adConfig = adSnap.data();
+            if (jokeSnap.exists()) jokeConfig = jokeSnap.data();
+        } catch(e) {}
+        buildDisplayList();
+        renderCube();
+    }
+    loadConfigs();
+
+    onSnapshot(query(collection(db, "jokes"), orderBy("timestamp", "desc"), limit(20)), (snapshot) => {
+        let temp = [];
+        snapshot.forEach(d => temp.push({ id: d.id, ...d.data() }));
+        temp.sort((a, b) => (b.createdAtMillis || 0) - (a.createdAtMillis || 0));
+        jokesList = temp;
+        buildDisplayList();
+        renderCube();
+    });
+
+    // మెయిన్ న్యూస్ ఫీడ్
+    onSnapshot(query(collection(db, "news"), orderBy("timestamp", "desc"), limit(30)), (snapshot) => {
+        let temp = [];
+        snapshot.forEach(docSnap => temp.push({ id: docSnap.id, ...docSnap.data() }));
+
+        temp.sort((a, b) => {
+            const timeA = a.timestamp?.toMillis ? a.timestamp.toMillis() : (a.createdAtMillis || 0);
+            const timeB = b.timestamp?.toMillis ? b.timestamp.toMillis() : (b.createdAtMillis || 0);
+            return timeB - timeA;
+        });
+
+        newsList = temp;
+        buildDisplayList();
+        renderCube();
+        recordCurrentView();
+    });
+
+    function buildDisplayList() {
+        const result = [];
+
+        // లింక్ ద్వారా వచ్చిన వార్తను ఖచ్చితంగా CARD 0 (మొదటి కార్డు) గా ఉంచడం
+        if (targetNewsDoc) {
+            result.push({ type: 'news', data: targetNewsDoc });
+        } else if (targetJokeDoc) {
+            result.push({ type: 'joke', data: targetJokeDoc });
+        }
+
+        const wantsAds = adConfig && adConfig.enabled && adConfig.imageUrl;
+        const adEvery = wantsAds ? Math.max(1, adConfig.everyNSwipes || 4) : 0;
+
+        const cycleJokes = targetJokeDoc ? jokesList.filter(j => j.id !== targetJokeDoc.id) : jokesList;
+        const wantsJokes = cycleJokes.length > 0 && (!jokeConfig || jokeConfig.enabled !== false);
+        const jokeEvery = Math.max(1, (jokeConfig && jokeConfig.everyNSwipes) || 5);
+        let jokeCursor = 0;
+
+        // మిగిలిన వార్తలను కింద జోడించడం (డూప్లికేట్ లేకుండా)
+        const filterNews = targetNewsDoc ? newsList.filter(n => n.id !== targetNewsDoc.id) : newsList;
+
+        filterNews.forEach((n, i) => {
+            result.push({ type: 'news', data: n });
+            const pos = i + 1;
+            const isLast = i === filterNews.length - 1;
+
+            if (wantsAds && pos % adEvery === 0 && !isLast) {
+                result.push({ type: 'ad', imageUrl: adConfig.imageUrl, linkUrl: adConfig.linkUrl || '#' });
+            }
+            if (wantsJokes && pos % jokeEvery === 0 && !isLast) {
+                result.push({ type: 'joke', data: cycleJokes[jokeCursor % cycleJokes.length] });
+                jokeCursor++;
+            }
+        });
+
+        if (result.length > 0) {
+            displayList = result;
+            if (!targetNewsId && !targetJokeId) {
+                try { localStorage.setItem("nb_display_cache", JSON.stringify(displayList.slice(0, 10))); } catch (e) {}
+            }
+        }
+    }
+
+    function renderCube() {
+        track.innerHTML = "";
+        cubeH = viewport.clientHeight || (window.innerHeight - 126);
+
+        displayList.forEach((item, index) => {
+            const card = document.createElement("div");
+            card.className = "news-card";
+            card.setAttribute("data-index", index);
+            card.style.transform = `rotateX(${index * -90}deg) translateZ(${cubeH / 2}px)`;
+
+            if (item.type === 'ad') {
+                card.className = "news-card fullbleed-card";
+                card.innerHTML = `
+                    <a class="fullbleed-link" href="${item.linkUrl}" target="_blank" rel="noopener">
+                        <img src="${item.imageUrl}" alt="Ad">
+                    </a>
+                    <span class="ad-label">Ad</span>
+                    <div class="ad-skip-hint">▲ పైకి స్వైప్ చేయండి</div>`;
+                track.appendChild(card);
+                return;
+            }
+
+            if (item.type === 'joke') {
+                card.className = "news-card fullbleed-card";
+                const fastMedia = getFastUrl(item.data.mediaUrl, item.data.mediaType);
+                card.innerHTML = `<img src="${fastMedia}" style="width:100%;height:100%;object-fit:contain;background:#000;display:block;" alt="Joke">`;
+                track.appendChild(card);
+                return;
+            }
+
+            // News Card
+            const data = item.data;
+            let cleanDesc = data.desc || "";
+            let shortDesc = cleanDesc.length > 520 ? cleanDesc.substring(0, 500) + "..." : cleanDesc;
+            const fastMedia = getFastUrl(data.mediaUrl, data.mediaType);
+
+            const mediaHtml = data.mediaType === 'video'
+                ? `<div class="video-wrap" onclick="window.triggerSoundClick(event)" ontouchend="window.triggerSoundClick(event)">
+                       <video class="card-video" src="${fastMedia}" autoplay loop muted playsinline preload="auto"></video>
+                       <button class="sound-btn" onclick="window.triggerSoundClick(event)" ontouchend="window.triggerSoundClick(event)" title="సౌండ్ ఆన్/ఆఫ్"><i class="fas fa-volume-mute"></i></button>
+                   </div>`
+                : `<img src="${fastMedia}">`;
+
+            card.innerHTML = `
+                <div class="news-media">${mediaHtml}</div>
+                <div class="news-content">
+                    <h2 class="news-title">${data.title || ""}</h2>
+                    <div class="news-desc">${shortDesc}</div>
+                    <button class="read-more-btn" onclick="window.triggerReadMore(event)" ontouchend="window.triggerReadMore(event)">ఇంకా చదవండి...</button>
+                    <div class="views-badge"><i class="fas fa-eye"></i> <span>${data.views || 0}</span></div>
+                </div>`;
+            track.appendChild(card);
+        });
+
+        updateBottomActions();
+        updateCubeFaces();
+        manageVideos();
+    }
+
+    function updateCubeFaces() {
+        if (!cubeH) cubeH = viewport.clientHeight || (window.innerHeight - 126);
+        track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(${currentIndex * 90}deg)`;
+
+        const allCards = document.querySelectorAll('.news-card');
+        allCards.forEach((c, idx) => {
+            if (idx === currentIndex) {
+                c.style.pointerEvents = "auto";
+                c.style.visibility = "visible";
+                c.style.zIndex = "10";
+            } else {
+                c.style.pointerEvents = "none";
+                c.style.visibility = "hidden";
+                c.style.zIndex = "1";
+            }
+        });
+    }
+
+    function manageVideos() {
+        const currentCard = document.querySelector(`.news-card[data-index="${currentIndex}"]`);
+        document.querySelectorAll('.card-video').forEach(vid => {
+            if (currentCard && currentCard.contains(vid)) {
+                vid.play().catch(() => {});
+            } else {
+                vid.pause();
+            }
+        });
+    }
+
+    function updateBottomActions() {
+        const item = displayList[currentIndex];
+        if (!item) return;
+
+        if (item.type === 'ad') {
+            bottomActions.style.display = "none";
+            return;
+        }
+        bottomActions.style.display = "flex";
+
+        const data = item.data;
+        const kind = item.type === 'joke' ? 'jokes' : 'news';
+        bottomActions.innerHTML = `
+            <button class="btn-action" onclick="window.goShare('${data.id}', '${(data.title||"").replace(/'/g,"")}', '${kind}')">
+                <i class="fab fa-whatsapp btn-icon wa-c"></i><span>వాట్సాప్</span>
+            </button>
+            <button class="btn-action" onclick="window.open('https://www.youtube.com')">
+                <i class="fab fa-youtube btn-icon yt-c"></i><span>యూట్యూబ్</span>
+            </button>
+            <button class="btn-action" onclick="window.goShare('${data.id}', '${(data.title||"").replace(/'/g,"")}', '${kind}')">
+                <i class="fas fa-share-alt btn-icon sh-c"></i><span>షేర్</span>
+            </button>
+            <button class="btn-action ${window.isUserFollowing?'is-following':''}" onclick="window.handleBell()">
+                <i class="fas fa-bell btn-icon bell-icon"></i><span>${window.isUserFollowing?'ఫాలోయింగ్':'ఫాలో'}</span>
+            </button>`;
+    }
+
+    // ఆడియో టోగుల్
+    let soundActionLock = 0;
+    window.triggerSoundClick = function(e) {
+        if (e) {
+            e.stopPropagation();
+            if (e.cancelable) e.preventDefault();
+        }
+        const now = Date.now();
+        if (now - soundActionLock < 250) return;
+        soundActionLock = now;
+
+        const currentCard = document.querySelector(`.news-card[data-index="${currentIndex}"]`);
+        if (!currentCard) return;
+        const video = currentCard.querySelector('video');
+        const btn = currentCard.querySelector('.sound-btn');
+
+        if (video) {
+            if (video.muted) {
+                video.muted = false;
+                video.volume = 1.0;
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                    btn.style.background = 'rgba(255,0,0,0.85)';
+                }
+                showToast("🔊 ఆడియో ఆన్ అయింది");
+            } else {
+                video.muted = true;
+                if (btn) {
+                    btn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                    btn.style.background = 'rgba(0,0,0,0.7)';
+                }
+                showToast("🔇 ఆడియో మ్యూట్ అయింది");
+            }
+        }
+    };
+
+    // ఇంకా చదవండి క్లిక్
+    let readMoreLock = 0;
+    window.triggerReadMore = function(e) {
+        if (e) {
+            e.stopPropagation();
+            if (e.cancelable) e.preventDefault();
+        }
+        const now = Date.now();
+        if (now - readMoreLock < 250) return;
+        readMoreLock = now;
+
+        window.openFullNews(currentIndex);
+    };
+
+    window.openFullNews = (index) => {
+        const item = displayList[index];
+        if (!item || item.type !== 'news') return;
+        const data = item.data;
+        if (!data) return;
+
+        const fastMedia = getFastUrl(data.mediaUrl, data.mediaType);
+        const fullMedia = data.mediaType === 'video'
+            ? `<video src="${fastMedia}" controls autoplay playsinline style="width:100%; border-radius:10px;"></video>`
+            : `<img src="${fastMedia}" style="width:100%; border-radius:10px;">`;
+
+        fullViewContent.innerHTML = `
+            ${fullMedia}
+            <h2 style="color:#ff0000; font-size:20px; margin-top:15px; line-height:1.4;">NB | ${data.title}</h2>
+            <div style="font-size:16.5px; line-height:1.8; color:#333; margin-top:10px;">${data.desc}</div>`;
+
+        fullView.style.display = "block";
+        fullView.scrollTop = 0;
+    };
+
+    closeBtn.addEventListener("click", () => {
+        fullView.style.display = "none";
+    });
+
+    window.handleBell = async () => {
+        try {
+            window.OneSignalDeferred = window.OneSignalDeferred || [];
+            window.OneSignalDeferred.push(async function(OneSignal) {
+                await OneSignal.Notifications.requestPermission();
+                await OneSignal.User.PushSubscription.optIn();
+                window.isUserFollowing = true;
+                localStorage.setItem("news_following", "true");
+                showToast("NB | అలెర్ట్స్ ఆన్ అయ్యాయి!");
+                updateBottomActions();
+            });
+        } catch (e) {
+            alert("నోటిఫికేషన్ పర్మిషన్ ఇవ్వాలి!");
+        }
+    };
+
+    function updateRotation(extraDeg) {
+        if (!cubeH) cubeH = viewport.clientHeight || (window.innerHeight - 126);
+        track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(${(currentIndex * 90) + extraDeg}deg)`;
+    }
+
+    let startY = 0;
+    let isMoving = false;
+
+    document.addEventListener("touchstart", (e) => {
+        if (e.target.closest('#full-view') || e.target.closest('.bottom-actions') || e.target.closest('.read-more-btn') || e.target.closest('.sound-btn') || e.target.closest('.video-wrap')) {
+            isMoving = false;
+            return;
+        }
+        startY = e.touches[0].clientY;
+        isMoving = true;
+        const allCards = document.querySelectorAll('.news-card');
+        allCards.forEach((c, idx) => {
+            if (Math.abs(idx - currentIndex) <= 1) c.style.visibility = "visible";
+        });
+    }, {passive: true});
+
+    document.addEventListener("touchmove", (e) => {
+        if (!isMoving) return;
+        const deltaY = startY - e.touches[0].clientY;
+        if (Math.abs(deltaY) > 8) {
+            updateRotation((deltaY / (cubeH || window.innerHeight)) * 90);
+        }
+    }, {passive: true});
+
+    document.addEventListener("touchend", (e) => {
+        if (!isMoving) return;
+        isMoving = false;
+        const deltaY = startY - e.changedTouches[0].clientY;
+        if (Math.abs(deltaY) > 45) {
+            if (deltaY > 0 && currentIndex < displayList.length - 1) {
+                currentIndex++;
+            } else if (deltaY < 0 && currentIndex > 0) {
+                currentIndex--;
+            }
+            updateBottomActions();
+            recordCurrentView();
+            manageVideos();
+        }
+        updateCubeFaces();
+    });
+
+    window.goShare = (id, title, kind) => {
+        const paramName = kind === 'jokes' ? 'jid' : 'id';
+        const link = `https://vallibabu15.github.io/news_bytes/?${paramName}=${id}`;
+        const label = kind === 'jokes' ? 'ఇక్కడ చూడండి' : 'వార్త ఇక్కడ చూడండి';
+        const text = "NB | " + title + "\n\n" + label + ": " + link;
+        if (navigator.share) {
+            navigator.share({ title: 'News Bytes', text: text }).catch(console.error);
+        } else {
+            navigator.clipboard.writeText(text);
+            showToast("NB | లింక్ కాపీ అయ్యింది ✓");
+        }
+    };
+
+    function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.innerText = msg;
+        t.style.display = "block";
+        setTimeout(() => t.style.display = "none", 2500);
+    }
+
+    window.addEventListener("resize", () => {
+        renderCube();
+    });
+</script>
+</body>
+</html>
