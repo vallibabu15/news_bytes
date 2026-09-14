@@ -1,1 +1,753 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>News Bytes</title>
+<meta property="og:site_name" content="News Bytes">
+<meta property="og:title" content="News Bytes | తాజా వార్తలు క్షణాల్లో..">
+<meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+<!-- Light YouTube API Setup -->
+<script>
+window.ytApiReady = false;
+window.ytPendingQueue = [];
+window.onYouTubeIframeAPIReady = function() {
+  window.ytApiReady = true;
+  if (window.ytPendingQueue && window.ytPendingQueue.length) {
+    window.ytPendingQueue.forEach(function(fn) { try { fn(); } catch(e){} });
+    window.ytPendingQueue = [];
+  }
+};
+</script>
+<script src="https://www.youtube.com/iframe_api" async></script>
+
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  try {
+    await OneSignal.init({
+      appId: "76c6f912-be9e-4f6c-b07e-dc2c4658573f",
+      serviceWorkerPath: "OneSignalSDKWorker.js",
+      serviceWorkerParam: { scope: "/news_bytes/" }
+    });
+  } catch(e) {}
+});
+</script>
+
+<style>
+:root { --h-h: 56px; --f-h: 66px; }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0; width: 100%; height: 100%;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: #fff; overflow: hidden;
+}
+.main-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #fff; overflow: hidden; position: relative; }
+.top-header { height: var(--h-h); width: 100%; background: #fff; z-index: 100; border-bottom: 1px solid #eee; flex-shrink: 0; }
+.top-header img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+/* 3D Cube Viewport */
+.slider-viewport {
+  flex-grow: 1; position: relative; overflow: hidden; background: #000;
+  perspective: 1200px; -webkit-perspective: 1200px; width: 100%; touch-action: none;
+}
+#slider-track {
+  width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+  transform-style: preserve-3d; -webkit-transform-style: preserve-3d;
+}
+.news-card {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: #fff; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  display: flex; flex-direction: column; overflow: hidden;
+  pointer-events: none; visibility: hidden;
+}
+.news-card.card-active {
+  pointer-events: auto !important; visibility: visible !important; z-index: 50 !important;
+}
+
+.news-media { width: 100%; height: 46% !important; background: #000; overflow: hidden; flex-shrink: 0; position: relative; }
+.news-media img { width: 100%; height: 100% !important; object-fit: contain !important; background: #000; display: block; }
+.card-video { width: 100%; height: 100% !important; object-fit: cover; display: block; pointer-events: none !important; }
+.yt-target, .news-media iframe { width: 100% !important; height: 100% !important; border: none !important; display: block !important; pointer-events: none !important; }
+.video-wrap { position: relative; width: 100%; height: 100%; background: #000; cursor: pointer; }
+
+.sound-btn {
+  position: absolute; bottom: 12px; right: 12px; width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(0,0,0,0.8); border: 2.5px solid #fff; color: #fff; font-size: 20px; display: flex;
+  align-items: center; justify-content: center; cursor: pointer; z-index: 500 !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6); pointer-events: auto !important;
+}
+.sound-btn.sound-on { background: #ff0000 !important; box-shadow: 0 0 16px rgba(255,0,0,0.9) !important; }
+
+.news-content { padding: 12px 16px 6px 16px; flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.news-title { font-size: 18.5px; color: #ff0000; font-weight: bold; margin: 0 0 8px 0; line-height: 1.35; flex-shrink: 0; }
+.news-desc { font-size: 15.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
+.news-desc b { color: #0033cc; font-weight: 900; background: linear-gradient(to bottom, #00a2ff 0%, #0044ff 50%, #0022aa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+@keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+.card-footer-bar { height: 44px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; margin-top: auto; padding-top: 4px; position: relative; z-index: 50; }
+.read-more-btn {
+  background: #fff; border: none; padding: 6px 10px 6px 0; font-size: 17px; font-weight: 900;
+  color: #ff0000; cursor: pointer; z-index: 500 !important; animation: sharp-blink 1.2s infinite ease-in-out;
+  pointer-events: auto !important;
+}
+.views-badge { font-size: 13.5px; color: #444; font-weight: bold; display: flex; align-items: center; gap: 5px; background: #f0f2f5; padding: 4px 10px; border-radius: 12px; }
+.views-badge i { color: #0044ff; }
+
+.bottom-actions { height: var(--f-h); background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; flex-shrink: 0; z-index: 200; padding-bottom: env(safe-area-inset-bottom); }
+.btn-action { border: none; background: none; text-align: center; color: #444; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; align-items: center; width: 25%; cursor: pointer; }
+.btn-icon { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; margin-bottom: -2px; font-size: 27px; }
+.bell-icon { font-size: 38px !important; color: #ff0000; animation: sharp-blink 1.2s infinite; }
+.is-following .bell-icon { color: #000; animation: none; }
+.wa-c { color: #075E54; } .yt-c { color: #FF0000; } .sh-c { color: #0022bb; }
+
+#full-view { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 99999; display: none; overflow-y: scroll !important; -webkit-overflow-scrolling: touch; padding: 16px; }
+.close-view { position: fixed; top: 15px; right: 15px; background: #ff0000; color: #fff; width: 44px; height: 44px; border-radius: 50%; border: none; font-size: 22px; z-index: 100000; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+#toast { position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 9px 20px; border-radius: 20px; display: none; z-index: 3000; font-size: 13px; white-space: nowrap; }
+#loader-box { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; color: #888; font-weight: bold; font-size: 14px; }
+.spinner { width: 32px; height: 32px; border: 3px solid #ddd; border-top: 3px solid #ff0000; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 8px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.promo-media { width: 100%; height: 100%; object-fit: contain; background:#000; display:block; }
+.promo-badge {
+  position: absolute; top: 12px; right: 12px; z-index: 60; font-size: 12px; font-weight: 800;
+  padding: 4px 10px; border-radius: 16px; color: #fff; letter-spacing: 0.3px;
+}
+.promo-badge.ad-badge { background: rgba(0,68,255,0.9); }
+.promo-badge.joke-badge { background: rgba(255,119,0,0.92); }
+.promo-hint { position:absolute; bottom:14px; left:14px; right:14px; color:#fff; font-size:14px; font-weight:800; text-shadow:0 1px 4px rgba(0,0,0,0.8); z-index:60; }
+</style>
+</head>
+<body>
+<div class="main-container">
+  <div class="top-header">
+    <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
+  </div>
+  <div class="slider-viewport" id="viewport">
+    <div id="loader-box"><div class="spinner"></div><span>వార్త లోడ్ అవుతోంది...</span></div>
+    <div id="slider-track"></div>
+  </div>
+  <div class="bottom-actions" id="global-actions"></div>
+</div>
+
+<div id="full-view">
+  <button class="close-view" onclick="window.closeFullNews()"><i class="fas fa-times"></i></button>
+  <div id="full-view-content" style="margin-top:45px; padding-bottom:50px;"></div>
+</div>
+
+<div id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+  getFirestore, collection, query, orderBy, limit, startAfter,
+  getDocs, getDoc, doc, onSnapshot, updateDoc, increment
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQJ0x2mFZqoCgiE_34fg9WxomurFWoopg",
+  authDomain: "newsbytes-848a9.firebaseapp.com",
+  projectId: "newsbytes-848a9",
+  storageBucket: "newsbytes-848a9.firebasestorage.app",
+  messagingSenderId: "26695955001",
+  appId: "1:26695955001:web:0c25b74d7a849f4a9d13e8"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const NEWS_PAGE_SIZE = 6;
+const JOKE_EVERY = 6;
+const PREFETCH_MARGIN = 3;
+
+let feedItems = [];
+let currentIndex = 0;
+let cubeH = window.innerHeight - 122;
+let isAnimating = false;
+
+const ytPlayers = {};
+let uidCounter = 0;
+function nextUid() { return 'c_' + (++uidCounter); }
+
+let lastNewsDoc = null;
+let noMoreNews = false;
+let isLoadingMore = false;
+let knownNewsIds = new Set();
+let newsSinceAd = 0, newsSinceJoke = 0, jokeCursor = 0;
+let jokesCache = [];
+let adConfig = null;
+
+const viewport = document.getElementById("viewport");
+const track = document.getElementById("slider-track");
+const bottomActions = document.getElementById("global-actions");
+const fullView = document.getElementById("full-view");
+const fullViewContent = document.getElementById("full-view-content");
+const loaderBox = document.getElementById("loader-box");
+
+const urlParams = new URLSearchParams(window.location.search);
+const targetNewsId = urlParams.get('id') ? urlParams.get('id').trim() : null;
+const targetJokeId = urlParams.get('jid') ? urlParams.get('jid').trim() : null;
+
+window.isUserFollowing = localStorage.getItem("news_following") === "true";
+
+function getYouTubeId(url) {
+  if (!url) return null;
+  const m = String(url).match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+  return m ? m[1] : null;
+}
+function escapeHtml(str) {
+  return String(str || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function sanitizeDesc(html) {
+  const allowed = new Set(['B', 'BR', 'STRONG']);
+  const wrap = document.createElement('div');
+  wrap.innerHTML = String(html || "");
+  (function clean(node) {
+    [...node.childNodes].forEach(child => {
+      if (child.nodeType === 1) {
+        if (!allowed.has(child.tagName)) child.replaceWith(document.createTextNode(child.textContent));
+        else { [...child.attributes].forEach(a => child.removeAttribute(a.name)); clean(child); }
+      }
+    });
+  })(wrap);
+  return wrap.innerHTML;
+}
+const viewedSet = new Set(JSON.parse(sessionStorage.getItem("viewed_items") || "[]"));
+function recordView(itemId) {
+  if (!itemId || viewedSet.has(itemId)) return;
+  viewedSet.add(itemId);
+  sessionStorage.setItem("viewed_items", JSON.stringify([...viewedSet]));
+  try { updateDoc(doc(db, "news", itemId), { views: increment(1) }); } catch (e) {}
+}
+function recordCurrentView() {
+  const item = feedItems[currentIndex];
+  if (item && item.type === 'news' && item.data.id) recordView(item.data.id);
+}
+function showToast(msg) {
+  const t = document.getElementById("toast");
+  t.innerText = msg; t.style.display = "block";
+  setTimeout(() => t.style.display = "none", 2500);
+}
+
+function createYtPlayer(uid, ytId) {
+  const make = () => {
+    const el = document.getElementById('yt-target-' + uid);
+    if (!el) {
+      setTimeout(() => {
+        const retryEl = document.getElementById('yt-target-' + uid);
+        if (retryEl && !ytPlayers[uid]) initPlayer(retryEl);
+      }, 60);
+      return;
+    }
+    initPlayer(el);
+  };
+
+  const initPlayer = (targetElement) => {
+    if (ytPlayers[uid]) return;
+    try {
+      ytPlayers[uid] = new YT.Player(targetElement, {
+        videoId: ytId,
+        playerVars: {
+          autoplay: 1, mute: 1, playsinline: 1, controls: 0, rel: 0,
+          showinfo: 0, modestbranding: 1, loop: 1, playlist: ytId, enablejsapi: 1,
+          origin: window.location.origin && window.location.origin !== 'null' ? window.location.origin : undefined
+        },
+        events: {
+          onReady: (e) => {
+            try {
+              e.target.mute();
+              const curr = feedItems[currentIndex];
+              if (curr && curr.uid === uid) e.target.playVideo();
+            } catch(err) {}
+          },
+          onStateChange: (e) => {
+            if (e.data === YT.PlayerState.ENDED) {
+              try { e.target.playVideo(); } catch(err) {}
+            }
+          }
+        }
+      });
+    } catch(err) {}
+  };
+
+  if (window.ytApiReady && window.YT && window.YT.Player) make();
+  else {
+    window.ytPendingQueue = window.ytPendingQueue || [];
+    window.ytPendingQueue.push(make);
+  }
+}
+
+async function loadAdConfig() {
+  try {
+    const snap = await getDoc(doc(db, "config", "ad"));
+    if (snap.exists()) adConfig = snap.data();
+  } catch (e) {}
+}
+async function loadJokes() {
+  try {
+    const snap = await getDocs(query(collection(db, "jokes"), orderBy("timestamp", "desc"), limit(10)));
+    jokesCache = [];
+    snap.forEach(d => jokesCache.push({ id: d.id, ...d.data() }));
+  } catch (e) {}
+}
+
+function createNewsCardHtml(data, uid) {
+  const ytId = getYouTubeId(data.mediaUrl);
+  const isVideo = data.mediaType === 'video' || data.mediaType === 'youtube' || ytId;
+  let mediaHtml;
+  if (isVideo && ytId) {
+    mediaHtml = `<div class="news-media video-wrap" onclick="window.handleVideoClick('${uid}', event)">
+      <div class="yt-target" id="yt-target-${uid}"></div>
+      <div class="sound-btn" onclick="window.handleVideoClick('${uid}', event)"><i class="fas fa-volume-mute"></i></div>
+    </div>`;
+  } else if (isVideo) {
+    mediaHtml = `<div class="news-media video-wrap" onclick="window.handleVideoClick('${uid}', event)">
+      <video class="card-video" src="${data.mediaUrl || ''}" loop muted playsinline preload="auto"></video>
+      <div class="sound-btn" onclick="window.handleVideoClick('${uid}', event)"><i class="fas fa-volume-mute"></i></div>
+    </div>`;
+  } else {
+    mediaHtml = `<div class="news-media" onclick="window.openCardArticle('${uid}')"><img src="${data.mediaUrl || ''}"></div>`;
+  }
+  return `
+    ${mediaHtml}
+    <div class="news-content" onclick="window.openCardArticle('${uid}')">
+      <h2 class="news-title">${escapeHtml(data.title)}</h2>
+      <div class="news-desc">${sanitizeDesc(data.desc)}</div>
+      <div class="card-footer-bar">
+        <button class="read-more-btn" onclick="event.stopPropagation(); window.openCardArticle('${uid}');">ఇంకా చదవండి...</button>
+        <div class="views-badge"><i class="fas fa-eye"></i> <span id="v-${data.id}">${data.views || 0}</span></div>
+      </div>
+    </div>`;
+}
+function createAdCardHtml(ad) {
+  return `
+    <div class="news-media" style="height:100% !important;" onclick="window.openPromoLink('${(ad.linkUrl||'').replace(/'/g,"")}')">
+      <span class="promo-badge ad-badge">ప్రకటన</span>
+      <img class="promo-media" src="${ad.imageUrl || ''}">
+      ${ad.linkUrl ? '<div class="promo-hint">👉 వివరాలకు నొక్కండి</div>' : ''}
+    </div>`;
+}
+function createJokeCardHtml(joke, uid) {
+  return `
+    <div class="news-media" style="height:100% !important;" onclick="window.openCardArticle('${uid}')">
+      <span class="promo-badge joke-badge">శుభాకాంక్షలు</span>
+      <img class="promo-media" src="${joke.mediaUrl || ''}">
+    </div>`;
+}
+
+function makeCardElement(item, index) {
+  if (!item.uid) item.uid = nextUid();
+  const card = document.createElement("div");
+  card.className = "news-card";
+  card.setAttribute("data-index", index);
+  card.setAttribute("data-uid", item.uid);
+
+  if (item.type === 'news') card.innerHTML = createNewsCardHtml(item.data, item.uid);
+  else if (item.type === 'ad') card.innerHTML = createAdCardHtml(item.data);
+  else if (item.type === 'joke') card.innerHTML = createJokeCardHtml(item.data, item.uid);
+  return card;
+}
+
+function appendFeedItem(item) {
+  const index = feedItems.length;
+  feedItems.push(item);
+  const card = makeCardElement(item, index);
+  track.appendChild(card);
+
+  if (item.type === 'news') {
+    const ytId = getYouTubeId(item.data.mediaUrl);
+    if (ytId) createYtPlayer(item.uid, ytId);
+  }
+}
+
+function interleaveAppendNews(newsItem) {
+  appendFeedItem({ type: 'news', data: newsItem });
+  newsSinceAd++; newsSinceJoke++;
+  if (adConfig && adConfig.enabled && adConfig.imageUrl && newsSinceAd >= (adConfig.everyNSwipes || 4)) {
+    appendFeedItem({ type: 'ad', data: adConfig });
+    newsSinceAd = 0;
+  }
+  if (jokesCache.length && newsSinceJoke >= JOKE_EVERY) {
+    appendFeedItem({ type: 'joke', data: jokesCache[jokeCursor % jokesCache.length] });
+    jokeCursor++;
+    newsSinceJoke = 0;
+  }
+}
+
+function prependLiveItem(newsItem) {
+  const insertAt = currentIndex + 1;
+  const item = { type: 'news', data: newsItem, uid: nextUid() };
+  feedItems.splice(insertAt, 0, item);
+  const newCard = makeCardElement(item, insertAt);
+  const cards = [...track.children];
+  if (cards[insertAt]) track.insertBefore(newCard, cards[insertAt]);
+  else track.appendChild(newCard);
+
+  document.querySelectorAll('.news-card').forEach((c, idx) => c.setAttribute('data-index', idx));
+
+  const ytId = getYouTubeId(newsItem.mediaUrl);
+  if (ytId) createYtPlayer(item.uid, ytId);
+  showToast("🆕 కొత్త వార్త వచ్చింది");
+  renderCubeAtRest();
+}
+
+function firstItemReady() {
+  if (loaderBox) loaderBox.style.display = "none";
+  if (viewport) cubeH = viewport.clientHeight || (window.innerHeight - 122);
+  renderCubeAtRest();
+  manageActiveVideo();
+  recordCurrentView();
+}
+
+async function loadNextNewsPage() {
+  if (isLoadingMore || noMoreNews) return;
+  isLoadingMore = true;
+  try {
+    let q;
+    if (lastNewsDoc) q = query(collection(db, "news"), orderBy("timestamp", "desc"), startAfter(lastNewsDoc), limit(NEWS_PAGE_SIZE));
+    else q = query(collection(db, "news"), orderBy("timestamp", "desc"), limit(NEWS_PAGE_SIZE));
+
+    const snap = await getDocs(q);
+    if (snap.empty) { noMoreNews = true; return; }
+    lastNewsDoc = snap.docs[snap.docs.length - 1];
+    if (snap.docs.length < NEWS_PAGE_SIZE) noMoreNews = true;
+
+    const wasEmpty = feedItems.length === 0;
+    snap.forEach(d => {
+      if (knownNewsIds.has(d.id)) return;
+      knownNewsIds.add(d.id);
+      interleaveAppendNews({ id: d.id, ...d.data() });
+    });
+    if (wasEmpty && feedItems.length > 0) firstItemReady();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    isLoadingMore = false;
+  }
+}
+
+function subscribeLatest() {
+  onSnapshot(query(collection(db, "news"), orderBy("timestamp", "desc"), limit(1)), (snap) => {
+    snap.forEach(d => {
+      if (!knownNewsIds.has(d.id)) {
+        knownNewsIds.add(d.id);
+        if (feedItems.length === 0) { interleaveAppendNews({ id: d.id, ...d.data() }); firstItemReady(); }
+        else prependLiveItem({ id: d.id, ...d.data() });
+      }
+    });
+    snap.docChanges().forEach(change => {
+      if (change.type === "modified") {
+        const vSpan = document.getElementById(`v-${change.doc.id}`);
+        if (vSpan) vSpan.innerText = change.doc.data().views || 0;
+      }
+    });
+  }, console.error);
+}
+
+async function boot() {
+  loadAdConfig();
+  loadJokes();
+
+  if (targetNewsId) {
+    try {
+      const d = await getDoc(doc(db, "news", targetNewsId));
+      if (d.exists() && !knownNewsIds.has(d.id)) {
+        knownNewsIds.add(d.id);
+        appendFeedItem({ type: 'news', data: { id: d.id, ...d.data() } });
+        firstItemReady();
+      }
+    } catch (e) {}
+  } else if (targetJokeId) {
+    try {
+      const d = await getDoc(doc(db, "jokes", targetJokeId));
+      if (d.exists()) { appendFeedItem({ type: 'joke', data: { id: d.id, ...d.data() } }); firstItemReady(); }
+    } catch (e) {}
+  }
+
+  await loadNextNewsPage();
+  subscribeLatest();
+}
+boot();
+
+/*
+  మాస్టర్ టెక్నాలజీ (Zero-Degree Reset 3D Cube):
+  ప్రస్తుతం చూస్తున్న కార్డ్ ఎప్పుడూ బ్రౌజర్ దృష్టిలో 0° వద్దే ఉంటుంది!
+  దీనివల్ల 1st, 2nd, 3rd... ప్రతి కార్డ్ లో బటన్లు 100% పక్కాగా పనిచేస్తాయి!
+*/
+function renderCubeAtRest() {
+  if (viewport) cubeH = viewport.clientHeight || (window.innerHeight - 122);
+  track.style.transition = "none";
+  track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(0deg)`;
+
+  const allCards = document.querySelectorAll('.news-card');
+  allCards.forEach((c, idx) => {
+    if (idx === currentIndex) {
+      c.classList.add('card-active');
+      c.style.display = "flex";
+      // ప్రస్తుత కార్డ్ ఎదురుగా ఫ్లాట్ గా (0 deg) ఉంటుంది
+      c.style.transform = `rotateX(0deg) translateZ(${cubeH / 2}px)`;
+    } else if (idx === currentIndex + 1) {
+      c.classList.remove('card-active');
+      c.style.display = "flex";
+      // కింద ఉన్న కార్డ్ 3D క్యూబ్ కింద ఫేస్ (-90 deg) లో సిద్ధంగా ఉంటుంది
+      c.style.transform = `rotateX(-90deg) translateZ(${cubeH / 2}px)`;
+    } else if (idx === currentIndex - 1) {
+      c.classList.remove('card-active');
+      c.style.display = "flex";
+      // పైన ఉన్న కార్డ్ 3D క్యూబ్ పై ఫేస్ (+90 deg) లో సిద్ధంగా ఉంటుంది
+      c.style.transform = `rotateX(90deg) translateZ(${cubeH / 2}px)`;
+    } else {
+      c.classList.remove('card-active');
+      c.style.display = "none";
+    }
+  });
+
+  updateBottomActions();
+  if (feedItems.length - currentIndex <= PREFETCH_MARGIN) loadNextNewsPage();
+}
+
+function manageActiveVideo() {
+  const currentItem = feedItems[currentIndex];
+  if (!currentItem) return;
+
+  const allCards = document.querySelectorAll('.news-card');
+  allCards.forEach((card) => {
+    const uid = card.getAttribute('data-uid');
+    const video = card.querySelector('video');
+    const yt = ytPlayers[uid];
+    const btn = card.querySelector('.sound-btn');
+    if (!video && !yt) return;
+
+    if (uid === currentItem.uid) {
+      if (video) { video.currentTime = 0; video.muted = true; video.play().catch(() => {}); }
+      if (yt && typeof yt.playVideo === 'function') {
+        try { yt.mute(); yt.seekTo(0); yt.playVideo(); } catch(e){}
+      }
+    } else {
+      if (video) { video.pause(); video.currentTime = 0; video.muted = true; }
+      if (yt && typeof yt.pauseVideo === 'function') {
+        try { yt.mute(); yt.pauseVideo(); } catch(e){}
+      }
+    }
+    if (btn) { btn.innerHTML = '<i class="fas fa-volume-mute"></i>'; btn.classList.remove('sound-on'); }
+  });
+}
+
+function updateBottomActions() {
+  const item = feedItems[currentIndex];
+  if (!item) return;
+  if (item.type === 'ad') { bottomActions.innerHTML = ''; return; }
+
+  if (item.type === 'joke') {
+    const data = item.data;
+    bottomActions.innerHTML = `
+      <button class="btn-action" onclick="window.shareJokeWA('${data.id}', '${(data.title||"").replace(/'/g,"")}')">
+        <i class="fab fa-whatsapp btn-icon wa-c"></i><span>వాట్సాప్</span>
+      </button>
+      <button class="btn-action" onclick="window.goShareGeneric('${data.id}', '${(data.title||"").replace(/'/g,"")}', 'jid')">
+        <i class="fas fa-share-alt btn-icon sh-c"></i><span>షేర్</span>
+      </button>`;
+    return;
+  }
+
+  const data = item.data;
+  bottomActions.innerHTML = `
+    <button class="btn-action" onclick="window.shareDirectWA('${data.id}', '${(data.title||"").replace(/'/g,"")}')">
+      <i class="fab fa-whatsapp btn-icon wa-c"></i><span>వాట్సాప్</span>
+    </button>
+    <button class="btn-action" onclick="window.open('https://www.youtube.com')">
+      <i class="fab fa-youtube btn-icon yt-c"></i><span>యూట్యూబ్</span>
+    </button>
+    <button class="btn-action" onclick="window.goShareGeneric('${data.id}', '${(data.title||"").replace(/'/g,"")}', 'id')">
+      <i class="fas fa-share-alt btn-icon sh-c"></i><span>షేర్</span>
+    </button>
+    <button class="btn-action ${window.isUserFollowing?'is-following':''}" onclick="window.handleBell()">
+      <i class="fas fa-bell btn-icon bell-icon"></i><span>${window.isUserFollowing?'ఫాలోయింగ్':'ఫాలో'}</span>
+    </button>`;
+}
+
+window.handleVideoClick = function(uid, e) {
+  if (e) e.stopPropagation();
+  const card = document.querySelector(`.news-card[data-uid="${uid}"]`);
+  if (!card) return;
+  const video = card.querySelector('video');
+  const yt = ytPlayers[uid];
+  const btn = card.querySelector('.sound-btn');
+
+  let isMuted = true;
+  if (video) isMuted = video.muted;
+  else if (yt && typeof yt.isMuted === 'function') {
+    try { isMuted = yt.isMuted(); } catch(err) { isMuted = true; }
+  }
+
+  if (isMuted) {
+    document.querySelectorAll('video').forEach(v => { if (v !== video) { v.pause(); v.muted = true; } });
+    Object.entries(ytPlayers).forEach(([u, p]) => {
+      if (u !== uid && p && typeof p.mute === 'function') {
+        try { p.mute(); } catch(err){}
+      }
+    });
+
+    if (video) {
+      video.muted = false; video.volume = 1.0;
+      const p = video.play();
+      if (p !== undefined) p.then(() => {
+        if (btn) { btn.innerHTML = '<i class="fas fa-volume-up"></i>'; btn.classList.add('sound-on'); }
+        showToast("🔊 సౌండ్ ఆన్ అయింది");
+      }).catch(() => { video.muted = true; });
+    } else if (yt && typeof yt.unMute === 'function') {
+      try {
+        yt.unMute(); yt.setVolume(100); yt.playVideo();
+        if (btn) { btn.innerHTML = '<i class="fas fa-volume-up"></i>'; btn.classList.add('sound-on'); }
+        showToast("🔊 సౌండ్ ఆన్ అయింది");
+      } catch(err) {}
+    }
+  } else {
+    if (video) video.muted = true;
+    if (yt && typeof yt.mute === 'function') {
+      try { yt.mute(); } catch(err){}
+    }
+    if (btn) { btn.innerHTML = '<i class="fas fa-volume-mute"></i>'; btn.classList.remove('sound-on'); }
+    showToast("🔇 సౌండ్ మ్యూట్ అయింది");
+  }
+};
+
+window.openPromoLink = function(url) { if (url) window.open(url, '_blank'); };
+
+window.openCardArticle = function(uid) {
+  const item = feedItems.find(it => it.uid === uid);
+  if (!item) return;
+  document.querySelectorAll('video').forEach(v => v.pause());
+  Object.values(ytPlayers).forEach(p => { if (p && p.pauseVideo) p.pauseVideo(); });
+
+  if (item.type === 'joke') {
+    fullViewContent.innerHTML = `<img src="${item.data.mediaUrl || ''}" style="width:100%; border-radius:10px;">
+      <h2 style="color:#ff7700; font-size:20px; margin-top:15px;">${escapeHtml(item.data.title)}</h2>`;
+    fullView.style.display = "block"; fullView.scrollTop = 0;
+    return;
+  }
+  if (item.type !== 'news') return;
+
+  const data = item.data;
+  const ytId = getYouTubeId(data.mediaUrl);
+  let fullMedia = '';
+  if (ytId) {
+    fullMedia = `<div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; margin-bottom:15px;"><iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1" style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;" allowfullscreen allow="autoplay"></iframe></div>`;
+  } else if (data.mediaType === 'video') {
+    fullMedia = `<video src="${data.mediaUrl}" controls autoplay playsinline style="width:100%; border-radius:10px;"></video>`;
+  } else {
+    fullMedia = `<img src="${data.mediaUrl}" style="width:100%; border-radius:10px;">`;
+  }
+  fullViewContent.innerHTML = `
+    ${fullMedia}
+    <h2 style="color:#ff0000; font-size:20px; margin-top:15px; line-height:1.4;">NB | ${escapeHtml(data.title)}</h2>
+    <div style="font-size:16.5px; line-height:1.8; color:#333; margin-top:10px;">${sanitizeDesc(data.desc)}</div>`;
+  fullView.style.display = "block"; fullView.scrollTop = 0;
+};
+
+window.closeFullNews = () => {
+  fullView.style.display = "none";
+  fullViewContent.innerHTML = "";
+  manageActiveVideo();
+};
+
+window.handleBell = async () => {
+  try {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    window.OneSignalDeferred.push(async function(OneSignal) {
+      const permission = await OneSignal.Notifications.requestPermission();
+      if (permission) {
+        await OneSignal.User.PushSubscription.optIn();
+        window.isUserFollowing = true;
+        localStorage.setItem("news_following", "true");
+        showToast("NB | అలెర్ట్స్ ఆన్ అయ్యాయి! 🔔");
+        updateBottomActions();
+      } else { showToast("దయచేసి నోటిఫికేషన్స్ Allow చేయండి!"); }
+    });
+  } catch (e) { alert("నోటిఫికేషన్ పర్మిషన్ ఇవ్వాలి!"); }
+};
+
+// 3D Cube Rotation Engine (Smooth 3D Roll + Instant Zero-Degree Lock)
+let startY = 0, isDragging = false;
+viewport.addEventListener("touchstart", (e) => {
+  if (isAnimating) return;
+  if (e.target.closest('.sound-btn') || e.target.closest('.read-more-btn') ||
+      e.target.closest('.bottom-actions') || e.target.closest('.yt-target') ||
+      e.target.closest('#full-view')) { isDragging = false; return; }
+  startY = e.touches[0].clientY;
+  isDragging = true;
+}, {passive: true});
+
+viewport.addEventListener("touchmove", (e) => {
+  if (!isDragging || isAnimating) return;
+  const deltaY = startY - e.touches[0].clientY;
+  if (Math.abs(deltaY) > 12) {
+    track.style.transition = "none";
+    const extraDeg = (deltaY / (cubeH || window.innerHeight)) * 90;
+    track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(${extraDeg}deg)`;
+  }
+}, {passive: true});
+
+viewport.addEventListener("touchend", (e) => {
+  if (!isDragging || isAnimating) return;
+  isDragging = false;
+  const deltaY = startY - e.changedTouches[0].clientY;
+
+  if (deltaY > 45 && currentIndex < feedItems.length - 1) {
+    // పైకి స్వైప్: 3D క్యూబ్ రొటేషన్ (+90deg)
+    isAnimating = true;
+    track.style.transition = "transform 0.35s cubic-bezier(0.25, 1, 0.35, 1)";
+    track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(90deg)`;
+    setTimeout(() => {
+      currentIndex++;
+      recordCurrentView();
+      renderCubeAtRest(); // వెంటనే 0° వద్ద లాక్ అవుతుంది
+      manageActiveVideo();
+      isAnimating = false;
+    }, 360);
+  } else if (deltaY < -45 && currentIndex > 0) {
+    // కిందకి స్వైప్: 3D క్యూబ్ రొటేషన్ (-90deg)
+    isAnimating = true;
+    track.style.transition = "transform 0.35s cubic-bezier(0.25, 1, 0.35, 1)";
+    track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(-90deg)`;
+    setTimeout(() => {
+      currentIndex--;
+      recordCurrentView();
+      renderCubeAtRest(); // వెంటనే 0° వద్ద లాక్ అవుతుంది
+      manageActiveVideo();
+      isAnimating = false;
+    }, 360);
+  } else {
+    // స్వైప్ సరిపోకపోతే తిరిగి 0° కి స్నాప్ అవుతుంది
+    track.style.transition = "transform 0.25s ease-out";
+    track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(0deg)`;
+  }
+});
+
+window.shareDirectWA = (id, title) => {
+  const liveLink = `https://vallibabu15.github.io/news_bytes/?id=${id}`;
+  const text = encodeURIComponent(`NB | *${title}*\n\nవార్త ఇక్కడ చూడండి:\n${liveLink}`);
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+};
+window.shareJokeWA = (id, title) => {
+  const liveLink = `https://vallibabu15.github.io/news_bytes/?jid=${id}`;
+  const text = encodeURIComponent(`NB | *${title}*\n\n${liveLink}`);
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+};
+window.goShareGeneric = (id, title, param) => {
+  const link = `https://vallibabu15.github.io/news_bytes/?${param}=${id}`;
+  const text = "NB | " + title + "\n\n" + link;
+  if (navigator.share) navigator.share({ title: 'News Bytes', text: text }).catch(console.error);
+  else { navigator.clipboard.writeText(text); showToast("NB | లింక్ కాపీ అయ్యింది ✓"); }
+};
+
+window.addEventListener("resize", () => {
+  if (feedItems.length > 0) {
+    if (viewport) cubeH = viewport.clientHeight || (window.innerHeight - 122);
+    renderCubeAtRest();
+  }
+});
+</script>
+</body>
+</html>
