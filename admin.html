@@ -515,8 +515,11 @@ async function sendAlert(payload) {
             headers: { "Content-Type": "application/json; charset=utf-8" },
             body: JSON.stringify(payload)
         });
-        return await res.json();
+        const result = await res.json();
+        alert("OneSignal Result: " + JSON.stringify(result));
+        return result;
     } catch (e) {
+        alert("Worker Fetch Error: " + e.message);
         return null;
     }
 }
