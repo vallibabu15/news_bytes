@@ -9,6 +9,11 @@
 <meta property="og:image" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+<!-- అడ్మిన్ ఎడిటర్‌లోని ఫాంట్లు ఇక్కడ కూడా లోడ్ కావాలి -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@400;700;800&family=Gidugu&family=Hind+Guntur:wght@400;700&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=NTR&family=Ponnala&family=Ramabhadra&family=Suranna&family=Tenali+Ramakrishna&display=swap" rel="stylesheet">
+
 <!-- Light YouTube API Setup -->
 <script>
 window.ytApiReady = false;
@@ -66,17 +71,14 @@ html, body {
   display: none; flex-direction: column; overflow: hidden;
   pointer-events: none;
 }
-/* 3D లో కనిపించే అన్ని కార్డులు పక్కాగా కనిపిస్తాయి */
 .news-card.card-visible {
   display: flex !important;
   visibility: visible !important;
 }
-/* యాక్టివ్ కార్డ్ మాత్రమే టచ్ క్లిక్స్ తీసుకుంటుంది */
 .news-card.card-active {
   pointer-events: auto !important;
   z-index: 50 !important;
 }
-/* 3D రియల్ డెప్త్ షేడింగ్ */
 .news-card::after {
   content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0,0,0,0); pointer-events: none; transition: background 0.3s;
@@ -100,9 +102,59 @@ html, body {
 .sound-btn.sound-on { background: #ff0000 !important; box-shadow: 0 0 16px rgba(255,0,0,0.9) !important; }
 
 .news-content { padding: 12px 16px 6px 16px; flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
-.news-title { font-size: 18.5px; color: #ff0000; font-weight: bold; margin: 0 0 8px 0; line-height: 1.35; flex-shrink: 0; }
-.news-desc { font-size: 15.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0; flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical; }
-.news-desc b { color: #0033cc; font-weight: 900; background: linear-gradient(to bottom, #00a2ff 0%, #0044ff 50%, #0022aa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+.news-media.has-ticker .sound-btn { bottom: 46px; }
+.news-media.has-ticker img,
+.news-media.has-ticker .card-video,
+.news-media.has-ticker .yt-target,
+.news-media.has-ticker iframe { height: calc(100% - 34px) !important; }
+
+/* కింద నీలి స్క్రోలింగ్ టిక్కర్: ప్రకాశవంతమైన అక్షరాలు కుడి నుంచి ఎడమకు నడుస్తాయి */
+.ticker {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 34px; z-index: 40;
+  background: #1b2ee6;
+  border-top: 2px solid #9db8ff; overflow: hidden; display: flex; align-items: center;
+  pointer-events: none;
+}
+.ticker-track {
+  display: inline-block; white-space: nowrap; padding-left: 100%;
+  animation: ticker-run 14s linear infinite;
+  font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 15.5px; font-weight: 800; color: #ffffff; letter-spacing: 0.2px;
+}
+@keyframes ticker-run { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+
+/* శీర్షిక: లావుగా, పెద్దగా, గాఢమైన చెర్రీ రెడ్ */
+.news-title {
+  font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 20px; color: #e2061e; font-weight: 900;
+  background: linear-gradient(180deg, #ff5a66 0%, #e2061e 46%, #a30015 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  margin: 0 0 8px 0; line-height: 1.35; flex-shrink: 0;
+}
+
+/* వివరణ: ఎడిటర్‌లో రాసినట్టే పేరాగ్రాఫ్‌లు, రంగులు, సైజ్‌లు */
+.news-desc {
+  font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 15.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0;
+  flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
+}
+.news-desc p, .full-body p { margin: 0 0 8px 0; }
+.full-body p { margin-bottom: 14px; }
+.news-desc p:last-child, .full-body p:last-child { margin-bottom: 0; }
+.news-desc b, .full-body b {
+  color: #1b2ee6; font-weight: 900;
+  background: linear-gradient(180deg, #6c80ff 0%, #1b2ee6 48%, #0d17a8 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+/* ఎడిటర్‌లో ఎంచుకున్న ప్రతి రంగు గ్లాస్ ఫినిష్ తో (పై భాగం మెరుపు, కింద గాఢత) */
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  .news-desc [style*="--c"], .full-body [style*="--c"] {
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--c) 58%, #fff) 0%, var(--c) 42%, color-mix(in srgb, var(--c) 78%, #000) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+}
+.full-body { font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif; font-size: 16.5px; line-height: 1.8; color: #333; margin-top: 10px; }
 
 @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 .card-footer-bar { height: 44px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; margin-top: auto; padding-top: 4px; position: relative; z-index: 50; }
@@ -111,8 +163,17 @@ html, body {
   color: #ff0000; cursor: pointer; z-index: 500 !important; animation: sharp-blink 1.2s infinite ease-in-out;
   pointer-events: auto !important;
 }
+.stats-right { display: flex; align-items: center; gap: 8px; }
 .views-badge { font-size: 13.5px; color: #444; font-weight: bold; display: flex; align-items: center; gap: 5px; background: #f0f2f5; padding: 4px 10px; border-radius: 12px; }
 .views-badge i { color: #0044ff; }
+.like-btn {
+  font-size: 13.5px; color: #444; font-weight: bold; display: flex; align-items: center; gap: 5px;
+  background: #f0f2f5; padding: 4px 10px; border-radius: 12px; border: none; cursor: pointer;
+  z-index: 500 !important; pointer-events: auto !important; font-family: inherit;
+}
+.like-btn i { color: #888; font-size: 14px; }
+.like-btn.liked { background: #ffe9ed; }
+.like-btn.liked i { color: #e0102f; }
 
 .bottom-actions { height: var(--f-h); background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; align-items: center; flex-shrink: 0; z-index: 200; padding-bottom: env(safe-area-inset-bottom); }
 .btn-action { border: none; background: none; text-align: center; color: #444; font-size: 11px; font-weight: bold; display: flex; flex-direction: column; align-items: center; width: 25%; cursor: pointer; }
@@ -216,21 +277,68 @@ function getYouTubeId(url) {
 function escapeHtml(str) {
   return String(str || "").replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
+
+// ============================================================
+// వివరణ శుభ్రం చేయడం: ఎడిటర్‌లో చేసిన ఫార్మాటింగ్ (పేరాగ్రాఫ్, రంగు, సైజ్, ఫాంట్, లావు)
+// మాత్రమే అనుమతిస్తాం. స్క్రిప్ట్‌లు, లింకులు, ఇతర ట్యాగ్‌లు తీసేస్తాం.
+// ============================================================
+const SAFE_FONTS = ['Noto Sans Telugu','Anek Telugu','Hind Guntur','Ramabhadra','Mandali','Ponnala','Suranna','NTR','Gidugu','Tenali Ramakrishna','Arial','Georgia'];
+
+function safeStyle(styleText) {
+  const out = [];
+  String(styleText || "").split(';').forEach(rule => {
+    const i = rule.indexOf(':');
+    if (i < 0) return;
+    const prop = rule.slice(0, i).trim().toLowerCase();
+    const val = rule.slice(i + 1).trim();
+    if (prop === 'color' && /^(#[0-9a-f]{3,8}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\))$/i.test(val)) {
+      out.push('color:' + val);
+      if (!/^(#333|#333333|rgb\(\s*51\s*,\s*51\s*,\s*51\s*\))$/i.test(val)) out.push('--c:' + val);
+    } else if (prop === 'font-size' && /^\d{1,2}(\.\d+)?px$/.test(val)) {
+      out.push('font-size:' + val);
+    } else if (prop === 'font-weight' && /^(normal|bold|[1-9]00)$/.test(val)) {
+      out.push('font-weight:' + val);
+    } else if (prop === 'line-height' && /^\d(\.\d+)?$/.test(val)) {
+      out.push('line-height:' + val);
+    } else if (prop === 'font-family') {
+      const name = val.replace(/["']/g, '').split(',')[0].trim();
+      if (SAFE_FONTS.includes(name)) out.push("font-family:'" + name + "'");
+    }
+  });
+  return out.join(';');
+}
+
 function sanitizeDesc(html) {
-  const allowed = new Set(['B', 'BR', 'STRONG']);
+  const allowed = new Set(['B', 'BR', 'STRONG', 'P', 'SPAN']);
   const wrap = document.createElement('div');
   wrap.innerHTML = String(html || "");
   (function clean(node) {
     [...node.childNodes].forEach(child => {
-      if (child.nodeType === 1) {
-        if (!allowed.has(child.tagName)) child.replaceWith(document.createTextNode(child.textContent));
-        else { [...child.attributes].forEach(a => child.removeAttribute(a.name)); clean(child); }
+      if (child.nodeType !== 1) return;
+      if (child.tagName === 'DIV') {
+        const p = document.createElement('p');
+        while (child.firstChild) p.appendChild(child.firstChild);
+        const st = child.getAttribute('style');
+        if (st) p.setAttribute('style', st);
+        child.replaceWith(p);
+        child = p;
       }
+      if (!allowed.has(child.tagName)) {
+        child.replaceWith(document.createTextNode(child.textContent));
+        return;
+      }
+      const style = (child.tagName === 'P' || child.tagName === 'SPAN') ? safeStyle(child.getAttribute('style')) : '';
+      [...child.attributes].forEach(a => child.removeAttribute(a.name));
+      if (style) child.setAttribute('style', style);
+      clean(child);
     });
   })(wrap);
   return wrap.innerHTML;
 }
+
 const viewedSet = new Set(JSON.parse(sessionStorage.getItem("viewed_items") || "[]"));
+const likedSet = new Set(JSON.parse(localStorage.getItem("liked_items") || "[]"));
+
 function recordView(itemId) {
   if (!itemId || viewedSet.has(itemId)) return;
   viewedSet.add(itemId);
@@ -246,6 +354,51 @@ function showToast(msg) {
   t.innerText = msg; t.style.display = "block";
   setTimeout(() => t.style.display = "none", 2500);
 }
+
+// ============================================================
+// లైక్ బటన్: ఒక ఫోన్ నుంచి ఒక్క లైక్ (మళ్ళీ నొక్కితే తీసేస్తుంది)
+// ============================================================
+window.toggleLike = function(id, e) {
+  if (e) e.stopPropagation();
+  const span = document.getElementById('l-' + id);
+  const btn = document.getElementById('lb-' + id);
+  if (!span || !btn) return;
+  const wasLiked = likedSet.has(id);
+  let n = parseInt(span.innerText) || 0;
+
+  if (wasLiked) { likedSet.delete(id); n = Math.max(0, n - 1); }
+  else { likedSet.add(id); n += 1; }
+
+  span.innerText = n;
+  btn.classList.toggle('liked', !wasLiked);
+  const icon = btn.querySelector('i');
+  if (icon) icon.className = wasLiked ? 'far fa-heart' : 'fas fa-heart';
+  localStorage.setItem("liked_items", JSON.stringify([...likedSet]));
+
+  try {
+    updateDoc(doc(db, "news", id), { likes: increment(wasLiked ? -1 : 1) }).catch(() => {});
+  } catch (err) {}
+};
+
+// నల్ల పట్టీలు రాకుండా: ఫోటో పరిమాణానికి తగ్గట్టు ఫోటో బాక్స్ ఎత్తు సెట్ చేయడం
+function mediaLimits() {
+  const w = (viewport && viewport.clientWidth) || window.innerWidth;
+  const vh = (viewport && viewport.clientHeight) || (window.innerHeight - 122);
+  return { w, maxH: vh * 0.56 - 34, minH: vh * 0.24 };
+}
+window.fitMedia = function(img) {
+  try {
+    const box = img.closest('.news-media');
+    if (!box || !img.naturalWidth) return;
+    const { w, maxH, minH } = mediaLimits();
+    let h = w * img.naturalHeight / img.naturalWidth;
+    if (h > maxH || h < minH) {
+      h = Math.min(maxH, Math.max(minH, h));
+      img.style.setProperty('object-fit', 'cover', 'important');
+    }
+    box.style.setProperty('height', Math.round(h + (box.classList.contains('has-ticker') ? 34 : 0)) + 'px', 'important');
+  } catch (e) {}
+};
 
 function createYtPlayer(uid, ytId) {
   const make = () => {
@@ -312,20 +465,28 @@ async function loadJokes() {
 function createNewsCardHtml(data, uid) {
   const ytId = getYouTubeId(data.mediaUrl);
   const isVideo = data.mediaType === 'video' || data.mediaType === 'youtube' || ytId;
+  const tickerText = data.ticker || data.summary || data.title || "";
+  const tickerSecs = Math.max(9, Math.round(tickerText.length * 0.28));
+  const tickerHtml = tickerText
+    ? `<div class="ticker"><div class="ticker-track" style="animation-duration:${tickerSecs}s"><span>${escapeHtml(tickerText)}</span></div></div>`
+    : "";
   let mediaHtml;
   if (isVideo && ytId) {
-    mediaHtml = `<div class="news-media video-wrap" onclick="window.handleVideoClick('${uid}', event)">
+    mediaHtml = `<div class="news-media video-wrap has-ticker" onclick="window.handleVideoClick('${uid}', event)">
       <div class="yt-target" id="yt-target-${uid}"></div>
       <div class="sound-btn" onclick="window.handleVideoClick('${uid}', event)"><i class="fas fa-volume-mute"></i></div>
+      ${tickerHtml}
     </div>`;
   } else if (isVideo) {
-    mediaHtml = `<div class="news-media video-wrap" onclick="window.handleVideoClick('${uid}', event)">
+    mediaHtml = `<div class="news-media video-wrap has-ticker" onclick="window.handleVideoClick('${uid}', event)">
       <video class="card-video" src="${data.mediaUrl || ''}" loop muted playsinline preload="auto"></video>
       <div class="sound-btn" onclick="window.handleVideoClick('${uid}', event)"><i class="fas fa-volume-mute"></i></div>
+      ${tickerHtml}
     </div>`;
   } else {
-    mediaHtml = `<div class="news-media" onclick="window.openCardArticle('${uid}')"><img src="${data.mediaUrl || ''}"></div>`;
+    mediaHtml = `<div class="news-media has-ticker" onclick="window.openCardArticle('${uid}')"><img src="${data.mediaUrl || ''}" onload="window.fitMedia(this)">${tickerHtml}</div>`;
   }
+  const liked = likedSet.has(data.id);
   return `
     ${mediaHtml}
     <div class="news-content" onclick="window.openCardArticle('${uid}')">
@@ -333,7 +494,12 @@ function createNewsCardHtml(data, uid) {
       <div class="news-desc">${sanitizeDesc(data.desc)}</div>
       <div class="card-footer-bar">
         <button class="read-more-btn" onclick="event.stopPropagation(); window.openCardArticle('${uid}');">ఇంకా చదవండి...</button>
-        <div class="views-badge"><i class="fas fa-eye"></i> <span id="v-${data.id}">${data.views || 0}</span></div>
+        <div class="stats-right">
+          <button class="like-btn ${liked ? 'liked' : ''}" id="lb-${data.id}" onclick="window.toggleLike('${data.id}', event)">
+            <i class="${liked ? 'fas' : 'far'} fa-heart"></i> <span id="l-${data.id}">${data.likes || 0}</span>
+          </button>
+          <div class="views-badge"><i class="fas fa-eye"></i> <span id="v-${data.id}">${data.views || 0}</span></div>
+        </div>
       </div>
     </div>`;
 }
@@ -363,6 +529,15 @@ function makeCardElement(item, index) {
   if (item.type === 'news') card.innerHTML = createNewsCardHtml(item.data, item.uid);
   else if (item.type === 'ad') card.innerHTML = createAdCardHtml(item.data);
   else if (item.type === 'joke') card.innerHTML = createJokeCardHtml(item.data, item.uid);
+
+  // యూట్యూబ్ వీడియో బాక్స్‌ని 16:9 కి సరిచేయడం (నల్ల పట్టీలు రాకుండా)
+  if (item.type === 'news' && getYouTubeId(item.data.mediaUrl)) {
+    const box = card.querySelector('.news-media');
+    if (box) {
+      const { w, maxH } = mediaLimits();
+      box.style.setProperty('height', Math.round(Math.min(w * 9 / 16, maxH) + 34) + 'px', 'important');
+    }
+  }
   return card;
 }
 
@@ -457,6 +632,8 @@ function subscribeLatest() {
       if (change.type === "modified") {
         const vSpan = document.getElementById(`v-${change.doc.id}`);
         if (vSpan) vSpan.innerText = change.doc.data().views || 0;
+        const lSpan = document.getElementById(`l-${change.doc.id}`);
+        if (lSpan) lSpan.innerText = change.doc.data().likes || 0;
       }
     });
   }, console.error);
@@ -504,11 +681,9 @@ function renderCubeAtRest() {
       c.classList.add('card-active', 'card-visible');
       c.style.transform = `rotateX(0deg) translateZ(${cubeH / 2}px)`;
     } else if (idx === currentIndex + 1) {
-      // కింద ఉన్న కార్డ్ 3D లో స్పష్టంగా కనిపిస్తుంది
       c.classList.add('card-visible');
       c.style.transform = `rotateX(-90deg) translateZ(${cubeH / 2}px)`;
     } else if (idx === currentIndex - 1) {
-      // పైన ఉన్న కార్డ్ 3D లో స్పష్టంగా కనిపిస్తుంది
       c.classList.add('card-visible');
       c.style.transform = `rotateX(90deg) translateZ(${cubeH / 2}px)`;
     }
@@ -652,8 +827,8 @@ window.openCardArticle = function(uid) {
   }
   fullViewContent.innerHTML = `
     ${fullMedia}
-    <h2 style="color:#ff0000; font-size:20px; margin-top:15px; line-height:1.4;">NB | ${escapeHtml(data.title)}</h2>
-    <div style="font-size:16.5px; line-height:1.8; color:#333; margin-top:10px;">${sanitizeDesc(data.desc)}</div>`;
+    <h2 style="font-family:'Noto Sans Telugu','Segoe UI',Arial,sans-serif; color:#e2061e; background:linear-gradient(180deg,#ff5a66 0%,#e2061e 46%,#a30015 100%); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; font-size:22px; font-weight:900; margin-top:15px; line-height:1.4;">NB | ${escapeHtml(data.title)}</h2>
+    <div class="full-body">${sanitizeDesc(data.desc)}</div>`;
   fullView.style.display = "block"; fullView.scrollTop = 0;
 };
 
@@ -683,7 +858,7 @@ window.handleBell = async () => {
 let startY = 0, isDragging = false;
 viewport.addEventListener("touchstart", (e) => {
   if (isAnimating) return;
-  if (e.target.closest('.sound-btn') || e.target.closest('.read-more-btn') ||
+  if (e.target.closest('.sound-btn') || e.target.closest('.read-more-btn') || e.target.closest('.like-btn') ||
       e.target.closest('.bottom-actions') || e.target.closest('.yt-target') ||
       e.target.closest('#full-view')) { isDragging = false; return; }
   startY = e.touches[0].clientY;
@@ -706,7 +881,6 @@ viewport.addEventListener("touchend", (e) => {
   const deltaY = startY - e.changedTouches[0].clientY;
 
   if (deltaY > 40 && currentIndex < feedItems.length - 1) {
-    // పైకి స్వైప్ చేసినప్పుడు కింద ఉన్న వార్త 3D లో దొర్లుతూ కళ్లముందే పైకి వస్తుంది
     isAnimating = true;
     track.style.transition = "transform 0.38s cubic-bezier(0.25, 1, 0.35, 1)";
     track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(90deg)`;
@@ -718,7 +892,6 @@ viewport.addEventListener("touchend", (e) => {
       isAnimating = false;
     }, 390);
   } else if (deltaY < -40 && currentIndex > 0) {
-    // కిందకి స్వైప్ చేసినప్పుడు పైన ఉన్న వార్త 3D లో రోల్ అవుతూ కిందకి వస్తుంది
     isAnimating = true;
     track.style.transition = "transform 0.38s cubic-bezier(0.25, 1, 0.35, 1)";
     track.style.transform = `translateZ(-${cubeH / 2}px) rotateX(-90deg)`;
