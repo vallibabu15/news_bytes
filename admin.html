@@ -8,7 +8,8 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@600;700;800;900&family=Ramabhadra&display=swap" rel="stylesheet">
+<!-- ఇదే ఫాంట్ లింక్ వార్తలు చూపించే పేజీ (news_bytes index.html) లో కూడా పెట్టాలి -->
+<link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@400;700;800&family=Gidugu&family=Hind+Guntur:wght@400;700&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=NTR&family=Ponnala&family=Ramabhadra&family=Suranna&family=Tenali+Ramakrishna&display=swap" rel="stylesheet">
 
 <style>
 * { box-sizing: border-box; }
@@ -102,20 +103,6 @@ input:focus, textarea:focus, select:focus {
 textarea { height: 110px; resize: none; line-height: 1.6; }
 select { cursor: pointer; }
 
-.toolbar { margin-bottom: 6px; }
-.tool-btn {
-    background: #0044ff;
-    color: white;
-    border: none;
-    padding: 7px 16px;
-    border-radius: 8px;
-    font-family: 'Ramabhadra', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: 800;
-    box-shadow: 0 2px 8px rgba(0,68,255,0.25);
-}
-
 .btn-file {
     border: 2.5px dashed #c0c6d4;
     color: #4a5568;
@@ -189,6 +176,8 @@ select { cursor: pointer; }
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.news-stats { font-size: 12px; color: #777; margin-top: 4px; display: flex; gap: 14px; font-weight: 700; }
+.news-stats .fa-heart { color: #e53935; }
 .item-actions { display: flex; gap: 18px; align-items: center; padding-left: 10px; }
 .wa-icon { color: #075E54; font-size: 26px; cursor: pointer; }
 .copy-icon { color: #666; font-size: 21px; cursor: pointer; }
@@ -204,6 +193,39 @@ select { cursor: pointer; }
     font-weight: 800;
     display: none;
 }
+
+.stat-bar { background: #fff4f4; border: 1px solid #ffd0d0; border-radius: 12px; padding: 10px 14px; margin-bottom: 18px; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; font-weight: 700; color: #444; }
+.stat-bar b { font-size: 22px; color: #d32f2f; }
+.stat-bar .fa-bell { color: #d32f2f; }
+.stat-bar .fa-rotate { color: #888; cursor: pointer; }
+
+/* ---------- రిచ్ ఎడిటర్ ---------- */
+.rt-toolbar { background: #f5f6f8; border: 1.5px solid #dcdfe6; border-bottom: none; border-radius: 12px 12px 0 0; padding: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.rt-toolbar .row-break { flex-basis: 100%; height: 0; }
+.rt-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 10px; font-size: 13px; cursor: pointer; font-weight: bold; color: #333; min-width: 34px; font-family: 'Noto Sans Telugu', sans-serif; }
+.rt-btn:active { background: #e6e6e6; }
+.rt-btn.blue { background: #1b2ee6; color: #fff; border-color: #1b2ee6; }
+.rt-btn.h1 { background: #222; color: #fff; border-color: #222; }
+.rt-btn.h2 { background: #d32f2f; color: #fff; border-color: #d32f2f; }
+.rt-toolbar select.rt-select { width: auto; max-width: 150px; padding: 6px; font-size: 13px; font-weight: 600; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
+.rt-toolbar input.rt-color { width: 38px; height: 32px; padding: 0; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; box-shadow: none; }
+.swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #bbb; cursor: pointer; }
+.rt-label { font-size: 12px; color: #666; font-weight: bold; margin: 0; }
+.swatch { width: 30px; height: 30px; transition: 0.15s; position: relative; background-image: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.65), rgba(255,255,255,0) 55%); }
+.swatch.on { transform: scale(1.22); box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111, 0 0 12px 3px rgba(0,0,0,0.3); }
+.swatch.on::after { content: "✓"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 900; }
+@supports (color: color-mix(in srgb, red 50%, blue)) {
+  #newsDesc [style*="--c"], #pvText[style*="--c"] {
+    background-image: linear-gradient(180deg, color-mix(in srgb, var(--c) 58%, #fff) 0%, var(--c) 42%, color-mix(in srgb, var(--c) 78%, #000) 100%);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+}
+.rt-btn.on { background: #ffe066; border-color: #e0a800; box-shadow: 0 0 0 3px rgba(255,190,0,0.5); }
+.rt-preview { min-width: 70px; height: 36px; padding: 0 12px; border: 1.5px solid #bbb; border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333; }
+#newsDesc { color: #333; border: 1.5px solid #dcdfe6; border-radius: 0 0 12px 12px; padding: 12px; min-height: 240px; font-size: 17px; line-height: 1.7; font-weight: 400; outline: none; overflow-wrap: anywhere; resize: vertical; overflow: auto; background: #fff; }
+#newsDesc:focus { border-color: #e60000; }
+#newsDesc p { margin: 0 0 12px 0; }
+#newsDesc:empty:before { content: attr(data-placeholder); color: #999; }
 </style>
 </head>
 
@@ -212,9 +234,18 @@ select { cursor: pointer; }
     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
 </div>
 
+<div style="font-size:12px; color:#1f4fe0; font-weight:700; text-align:center; margin:-6px 0 10px;">వెర్షన్ v3.3 · గ్లాస్ రంగులు</div>
+
 <div class="admin-card">
     <i class="fas fa-sync close-icon" onclick="location.reload()" title="రీఫ్రెష్ చేయండి"></i>
     <h2 id="formTitle">కొత్త వార్త పోస్ట్ చేయండి</h2>
+
+    <div class="stat-bar">
+        <i class="fas fa-bell"></i>
+        <span>సబ్స్క్రైబర్లు:</span>
+        <b id="subCount">...</b>
+        <i class="fas fa-rotate" id="subRefresh" title="రీఫ్రెష్"></i>
+    </div>
 
     <div class="form-group">
         <label><i class="fas fa-photo-video"></i> మీడియా ఎంపిక (ఫోటో లేదా యూట్యూబ్)</label>
@@ -256,11 +287,57 @@ select { cursor: pointer; }
     </div>
 
     <div class="form-group">
+        <label><i class="fas fa-bullhorn"></i> స్క్రోలింగ్ టిక్కర్ (ఫోటో కింద నడిచే నీలి పట్టీ)</label>
+        <input type="text" id="newsTicker" placeholder="ఖాళీగా వదిలితే సారాంశం/శీర్షిక నడుస్తుంది...">
+    </div>
+
+    <div class="form-group">
         <label><i class="fas fa-align-left"></i> పూర్తి వివరణ (Description)</label>
-        <div class="toolbar">
-            <button class="tool-btn" onclick="makeBold()">Bold (బ్లూ హైలైట్)</button>
+
+        <div class="rt-toolbar" id="toolbar">
+            <div id="colorPreview" class="rt-preview" title="ఎంచుకున్న రంగు / లావు ఇలా వస్తుంది"><span id="pvText">అఆ Aa</span></div>
+            <select class="rt-select" id="sizeSel" title="ఫాంట్ సైజ్" style="max-width:100px;">
+                <option value="">సైజ్</option>
+                <option value="14">14</option><option value="16">16</option><option value="17">17 (మామూలు)</option><option value="18">18</option><option value="20">20</option><option value="22">22</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="36">36</option><option value="42">42</option><option value="48">48</option>
+            </select>
+            <button type="button" class="rt-btn" id="btnBold" title="లావు అక్షరాలు"><b>B</b></button>
+            <select class="rt-select" id="fontSel" title="ఫాంట్">
+                <option value="">ఫాంట్</option>
+                <option value="Noto Sans Telugu">Noto Sans Telugu</option>
+                <option value="Anek Telugu">Anek Telugu</option>
+                <option value="Hind Guntur">Hind Guntur</option>
+                <option value="Ramabhadra">Ramabhadra</option>
+                <option value="Mandali">Mandali</option>
+                <option value="Ponnala">Ponnala</option>
+                <option value="Suranna">Suranna</option>
+                <option value="NTR">NTR</option>
+                <option value="Gidugu">Gidugu</option>
+                <option value="Tenali Ramakrishna">Tenali Ramakrishna</option>
+                <option value="Arial">Arial</option>
+                <option value="Georgia">Georgia</option>
+            </select>
+            <span class="row-break"></span>
+
+            <p class="rt-label">రంగు:</p>
+            <span id="swatchBox" style="display:flex; flex-wrap:wrap; gap:9px; align-items:center;"></span>
+            <input type="color" class="rt-color" id="colorPick" value="#e0102f" title="ఇతర రంగు ఎంచుకోండి">
+            <span class="row-break"></span>
+
+            <button type="button" class="rt-btn blue" id="btnBlue" title="నీలి రంగు హైలైట్ (పాత Bold)">నీలి B</button>
+            <button type="button" class="rt-btn" id="btnClear" title="ఫార్మాటింగ్ తీసేయి">Clear</button>
         </div>
-        <textarea id="newsDesc" placeholder="వార్త పూర్తి వివరాలు ఇక్కడ రాయండి..."></textarea>
+
+        <div id="newsDesc" contenteditable="true" data-placeholder="వార్త పూర్తి వివరాలు ఇక్కడ రాయండి... (Enter నొక్కితే కొత్త పేరాగ్రాఫ్)"><p><br></p></div>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; background:#eaf0ff; border:1.5px dashed #1636e0; border-radius:12px; padding:10px 14px; margin-top:6px; margin-bottom:6px;">
+        <input type="checkbox" id="blueHeading" style="width:22px; height:22px; padding:0; margin:0; cursor:pointer; flex-shrink:0; accent-color:#1636e0;">
+        <label for="blueHeading" style="margin:0; cursor:pointer; font-size:14px;">నోటిఫికేషన్ ఫోటోలో హెడ్డింగ్ బ్లూ లో చూపించు (టిక్ లేకపోతే పాత పద్ధతే)</label>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; background:#fff8e1; border:1.5px dashed #f0b400; border-radius:12px; padding:10px 14px; margin-top:6px;">
+        <input type="checkbox" id="noNotify" style="width:22px; height:22px; padding:0; margin:0; cursor:pointer; flex-shrink:0; accent-color:#e0102f;">
+        <label for="noNotify" style="margin:0; cursor:pointer; font-size:14px;">నోటిఫికేషన్ పంపవద్దు (టెస్ట్ కోసం, వార్త మాత్రమే సేవ్ అవుతుంది)</label>
     </div>
 
     <button class="post-btn" id="postBtn">పబ్లిష్ & అలెర్ట్ పంపు</button>
@@ -337,13 +414,14 @@ const firebaseConfig = { apiKey: "AIzaSyDQJ0x2mFZqoCgiE_34fg9WxomurFWoopg", auth
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Media uploads AND push alerts now both go through your own Cloudflare Worker.
-// The OneSignal REST key lives only on the Worker (as a secret) — it is no
-// longer exposed in this file, and no public CORS proxy is needed anymore.
+// Media uploads AND push alerts both go through your own Cloudflare Worker.
+// The OneSignal REST key lives only on the Worker (as a secret).
 const R2_UPLOAD_ENDPOINT = "https://newsbytes-upload.vallibabu15.workers.dev";
 const NOTIFY_ENDPOINT = "https://newsbytes-upload.vallibabu15.workers.dev/notify";
+const SUBS_ENDPOINT = "https://newsbytes-upload.vallibabu15.workers.dev/subscribers";
 
 let editID = null;
+const newsCache = {};
 
 function extractYouTubeId(url) {
     if (!url) return null;
@@ -351,37 +429,369 @@ function extractYouTubeId(url) {
     return match ? match[1] : null;
 }
 
-window.makeBold = () => {
-    const area = document.getElementById('newsDesc');
-    const start = area.selectionStart;
-    const end = area.selectionEnd;
-    const sel = area.value.substring(start, end);
-    if (sel) {
-        area.value = area.value.substring(0, start) + "<b>" + sel + "</b>" + area.value.substring(end);
+// ============================================================
+// సబ్స్క్రైబర్ల సంఖ్య (Worker లో /subscribers రూట్ ఉండాలి; లేకపోతే "—" కనిపిస్తుంది)
+// ============================================================
+async function loadSubscribers() {
+    const el = document.getElementById('subCount');
+    el.innerText = "...";
+    try {
+        const r = await fetch(SUBS_ENDPOINT);
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        const j = await r.json();
+        const n = j.count ?? j.messageable_players ?? j.players;
+        el.innerText = (n !== undefined && n !== null) ? Number(n).toLocaleString('en-IN') : "—";
+    } catch (e) {
+        console.warn("Subscriber count failed", e);
+        el.innerText = "—";
     }
+}
+document.getElementById('subRefresh').addEventListener('click', loadSubscribers);
+loadSubscribers();
+
+// ============================================================
+// రిచ్ టెక్స్ట్ ఎడిటర్
+// ============================================================
+const editor = document.getElementById('newsDesc');
+const toolbar = document.getElementById('toolbar');
+let savedRange = null;
+
+try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {}
+
+function saveSel() {
+    const sel = window.getSelection();
+    if (sel.rangeCount && editor.contains(sel.anchorNode)) {
+        savedRange = sel.getRangeAt(0).cloneRange();
+    }
+}
+function restoreSel() {
+    editor.focus();
+    if (savedRange) {
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(savedRange);
+    }
+}
+document.addEventListener('selectionchange', () => { saveSel(); updateToolbarState(); });
+
+toolbar.addEventListener('mousedown', (e) => {
+    const t = e.target;
+    if (t.tagName !== 'SELECT' && t.tagName !== 'INPUT' && t.tagName !== 'OPTION') e.preventDefault();
+});
+
+function ensureParagraph() {
+    if (!editor.innerHTML.trim() || editor.innerHTML === '<br>') editor.innerHTML = '<p><br></p>';
+}
+editor.addEventListener('input', ensureParagraph);
+editor.addEventListener('focus', ensureParagraph);
+
+function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// పేస్ట్ చేసినప్పుడు లైన్లు అలాగే పేరాగ్రాఫ్‌లుగా వస్తాయి
+editor.addEventListener('paste', (e) => {
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    const html = text.split(/\r?\n/).map(l => l.trim() ? '<p>' + esc(l) + '</p>' : '').join('');
+    if (html) document.execCommand('insertHTML', false, html);
+});
+
+function cmd(name, val) {
+    restoreSel();
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand(name, false, val || null);
+    saveSel();
+}
+
+document.getElementById('btnBold').addEventListener('click', () => {
+    cmd('bold');
+    setTimeout(updateToolbarState, 0);
+});
+
+document.getElementById('btnBlue').addEventListener('click', () => {
+    restoreSel();
+    document.execCommand('styleWithCSS', false, false);
+    document.execCommand('bold');
+    document.execCommand('styleWithCSS', false, true);
+    saveSel();
+});
+
+document.getElementById('btnClear').addEventListener('click', () => {
+    restoreSel();
+    document.execCommand('removeFormat');
+    saveSel();
+});
+
+let pendingSize = null;
+let syncLockUntil = 0;
+
+function fixSizeSpans(px) {
+    editor.querySelectorAll('font[size="7"]').forEach(f => {
+        const span = document.createElement('span');
+        span.style.fontSize = px + 'px';
+        span.innerHTML = f.innerHTML;
+        f.replaceWith(span);
+    });
+    editor.querySelectorAll('span').forEach(sp => {
+        if (sp.style.fontSize === 'xxx-large') sp.style.fontSize = px + 'px';
+    });
+}
+
+document.getElementById('fontSel').addEventListener('change', (e) => {
+    if (e.target.value) cmd('fontName', e.target.value);
+    syncLockUntil = Date.now() + 700;
+});
+
+document.getElementById('sizeSel').addEventListener('change', (e) => {
+    const px = e.target.value;
+    if (!px) return;
+    pendingSize = px;
+    syncLockUntil = Date.now() + 700;
+    restoreSel();
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('fontSize', false, '7');
+    fixSizeSpans(px);
+    saveSel();
+});
+
+// టైప్ చేస్తూ ఉన్నప్పుడు కొత్త అక్షరాలకు ఎంచుకున్న సైజ్ వర్తిస్తుంది
+editor.addEventListener('input', () => {
+    if (pendingSize) fixSizeSpans(pendingSize);
+});
+
+// గాఢమైన "రాయల్" రంగులు (ఎడిటర్ మరియు నోటిఫికేషన్ రెండింటికీ)
+const ROYAL_COLORS = [
+    { n: "నలుపు (మామూలు)",  c: "#333333", show: "#111111" },
+    { n: "రాయల్ బ్లూ",       c: "#1b2ee6" },
+    { n: "రెడ్",             c: "#e2061e" },
+    { n: "రాయల్ గ్రీన్",      c: "#008a35" },
+    { n: "రాయల్ పర్పుల్",    c: "#5b13c9" },
+    { n: "రాయల్ ఆరెంజ్",    c: "#ee5500" },
+    { n: "రాయల్ పింక్",      c: "#cf0f6a" },
+    { n: "రాయల్ టీల్",       c: "#007c91" },
+    { n: "రాయల్ గోల్డ్",     c: "#c68600" }
+];
+
+const colorPick = document.getElementById('colorPick');
+colorPick.addEventListener('input', () => cmd('foreColor', colorPick.value));
+
+const swatchBox = document.getElementById('swatchBox');
+const DEFAULT_TEXT_COLOR = "#333333";
+const norm = (v) => String(v || "").replace(/\s+/g, "").toLowerCase();
+const hexToRgb = (h) => { const n = parseInt(h.slice(1), 16); return `rgb(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255})`; };
+const swatchEls = [];
+
+function annotateColors() {
+    const normal = norm(hexToRgb(DEFAULT_TEXT_COLOR));
+    editor.querySelectorAll('span[style*="color"]').forEach(sp => {
+        const c = sp.style.color;
+        if (c && norm(c) !== normal) sp.style.setProperty('--c', c);
+        else sp.style.removeProperty('--c');
+    });
+}
+editor.addEventListener('input', annotateColors);
+
+function updateToolbarState() {
+    const sel = window.getSelection();
+    if (!sel.rangeCount || !editor.contains(sel.anchorNode)) return;
+    let cur = "";
+    try { cur = norm(document.queryCommandValue('foreColor')); } catch (e) {}
+    swatchEls.forEach(sw => sw.classList.toggle('on', sw.dataset.rgb === cur));
+    let bold = false;
+    try { bold = document.queryCommandState('bold'); } catch (e) {}
+    document.getElementById('btnBold').classList.toggle('on', bold);
+
+    // ఖాళీ బాక్స్: ఎంచుకున్న రంగు, లావు ఇలా వస్తుందని చూపిస్తుంది
+    const pv = document.getElementById('pvText');
+    if (pv) {
+        const isNormal = !cur || cur === norm(hexToRgb(DEFAULT_TEXT_COLOR));
+        pv.style.color = cur || DEFAULT_TEXT_COLOR;
+        if (isNormal) pv.style.removeProperty('--c'); else pv.style.setProperty('--c', cur);
+        pv.style.fontWeight = bold ? '900' : '400';
+    }
+
+    if (Date.now() >= syncLockUntil) {
+        let el = sel.anchorNode;
+        if (el && el.nodeType === 3) el = el.parentElement;
+        if (el && editor.contains(el)) {
+            const cs = getComputedStyle(el);
+            const px = String(Math.round(parseFloat(cs.fontSize)));
+            const sizeSel = document.getElementById('sizeSel');
+            sizeSel.value = [...sizeSel.options].some(o => o.value === px) ? px : "";
+            const fam = cs.fontFamily.split(',')[0].replace(/["']/g, '').trim();
+            const fontSel = document.getElementById('fontSel');
+            fontSel.value = [...fontSel.options].some(o => o.value === fam) ? fam : "";
+        }
+    }
+}
+
+ROYAL_COLORS.forEach(col => {
+    const sw = document.createElement('span');
+    sw.className = 'swatch';
+    sw.title = col.n;
+    sw.style.backgroundColor = col.show || col.c;
+    sw.dataset.rgb = norm(hexToRgb(col.c));
+    sw.addEventListener('click', () => {
+        restoreSel();
+        let cur = "";
+        try { cur = norm(document.queryCommandValue('foreColor')); } catch (e) {}
+        const wasOn = (cur === sw.dataset.rgb);
+        if (wasOn) {
+            cmd('foreColor', DEFAULT_TEXT_COLOR);      // మళ్ళీ నొక్కితే: మామూలు అక్షరాలు
+        } else {
+            colorPick.value = col.c;
+            cmd('foreColor', col.c);                   // నొక్కితే: ఈ రంగులో అక్షరాలు
+        }
+        annotateColors();
+        swatchEls.forEach(x => x.classList.toggle('on', x === sw && !wasOn));
+        setTimeout(updateToolbarState, 0);
+    });
+    swatchEls.push(sw);
+    swatchBox.appendChild(sw);
+});
+swatchEls[0].classList.add('on');
+
+
+
+const PRESETS = {
+    heading: { fontSize: '30px', fontWeight: '800', color: '#0a0a1f' },
+    sub:     { fontSize: '23px', fontWeight: '700', color: '#e0102f' },
+    para:    null
 };
+
+function currentBlock() {
+    const sel = window.getSelection();
+    let node = sel.anchorNode;
+    while (node && node.parentNode !== editor) node = node.parentNode;
+    return node && node.nodeType === 1 ? node : null;
+}
+
+toolbar.querySelectorAll('[data-preset]').forEach(btn => {
+    btn.addEventListener('click', () => {
+        restoreSel();
+        let block = currentBlock();
+        if (!block) {
+            document.execCommand('formatBlock', false, 'p');
+            block = currentBlock();
+        }
+        if (!block) return;
+        block.querySelectorAll('[style]').forEach(el => {
+            el.style.fontSize = ''; el.style.fontWeight = ''; el.style.color = '';
+            if (!el.getAttribute('style')) el.removeAttribute('style');
+        });
+        block.removeAttribute('style');
+        const p = PRESETS[btn.dataset.preset];
+        if (p) {
+            block.style.fontSize = p.fontSize;
+            block.style.fontWeight = p.fontWeight;
+            block.style.color = p.color;
+            block.style.lineHeight = '1.4';
+        }
+        saveSel();
+    });
+});
+
+// హెడ్డింగ్/ఉప శీర్షిక రాసి Enter నొక్కితే, కొత్త లైన్ ఆటోమేటిక్‌గా మామూలు అక్షరాలుగా వస్తుంది
+editor.addEventListener('beforeinput', (e) => {
+    if (e.inputType !== 'insertParagraph') return;
+    setTimeout(() => {
+        const blk = currentBlock();
+        if (!blk || blk.textContent.trim() !== '') return;
+        const prev = blk.previousElementSibling;
+        if (prev && (prev.style.fontSize === '30px' || prev.style.fontSize === '23px')) {
+            blk.removeAttribute('style');
+            blk.innerHTML = '<br>';
+            const r = document.createRange();
+            r.setStart(blk, 0); r.collapse(true);
+            const sel = window.getSelection();
+            sel.removeAllRanges(); sel.addRange(r);
+        }
+    }, 0);
+});
+
+function getCleanHTML() {
+    const clone = editor.cloneNode(true);
+    clone.querySelectorAll('div').forEach(d => {
+        const p = document.createElement('p');
+        p.innerHTML = d.innerHTML;
+        if (d.getAttribute('style')) p.setAttribute('style', d.getAttribute('style'));
+        d.replaceWith(p);
+    });
+    const out = document.createElement('div');
+    let cur = null;
+    Array.from(clone.childNodes).forEach(n => {
+        const isBlock = n.nodeType === 1 && /^(P|H[1-6]|UL|OL|BLOCKQUOTE)$/.test(n.tagName);
+        if (isBlock) { cur = null; out.appendChild(n); }
+        else {
+            if (!cur) { cur = document.createElement('p'); out.appendChild(cur); }
+            cur.appendChild(n);
+        }
+    });
+    while (out.lastChild && out.lastChild.nodeType === 1 && !out.lastChild.textContent.trim() && !out.lastChild.querySelector('img')) {
+        out.removeChild(out.lastChild);
+    }
+    return out.innerHTML;
+}
+
+function loadIntoEditor(desc) {
+    desc = desc || '';
+    if (!/<(p|div|br|h[1-6])[\s>\/]/i.test(desc)) {
+        desc = desc.split(/\n+/).filter(l => l.trim()).map(l => '<p>' + l + '</p>').join('');
+    }
+    editor.innerHTML = desc || '<p><br></p>';
+}
+
+// ============================================================
+// వార్తల జాబితా
+// ============================================================
+function makeIcon(cls, title, handler) {
+    const i = document.createElement('i');
+    i.className = cls;
+    if (title) i.title = title;
+    i.addEventListener('click', handler);
+    return i;
+}
 
 onSnapshot(query(collection(db, "news"), orderBy("timestamp", "desc")), (snapshot) => {
     const container = document.getElementById('newsList');
     container.innerHTML = "";
     snapshot.forEach(newsDoc => {
         const data = newsDoc.data();
-        const cleanTitle = (data.title || "").replace(/'/g, "");
-        const category = data.category || "తాజా వార్తలు";
+        const id = newsDoc.id;
+        newsCache[id] = data;
+
         const item = document.createElement('div');
         item.className = "news-item";
-        item.innerHTML = `
-            <div class="news-info">
-                <span class="cat-badge">${category}</span>
-                <span class="item-title">${cleanTitle}</span>
-            </div>
-            <div class="item-actions">
-                <i class="fab fa-whatsapp wa-icon" onclick="shareWA('${newsDoc.id}', '${cleanTitle}')"></i>
-                <i class="fas fa-copy copy-icon" onclick="copyLink('${newsDoc.id}', 'id')" title="లింక్ కాపీ చేయి"></i>
-                <i class="fas fa-edit edit-icon" onclick="editNews('${newsDoc.id}', '${cleanTitle}', \`${(data.desc || "").replace(/`/g, "'")}\`, '${(data.summary || "").replace(/'/g, "")}', '${category}', '${data.mediaType === 'youtube' ? data.mediaUrl : ''}')"></i>
-                <i class="fas fa-trash-alt del-icon" onclick="deleteNews('${newsDoc.id}')"></i>
-            </div>
-        `;
+
+        const info = document.createElement('div');
+        info.className = "news-info";
+
+        const badge = document.createElement('span');
+        badge.className = "cat-badge";
+        badge.textContent = data.category || "తాజా వార్తలు";
+
+        const titleEl = document.createElement('span');
+        titleEl.className = "item-title";
+        titleEl.textContent = data.title || "";
+
+        const stats = document.createElement('div');
+        stats.className = "news-stats";
+        stats.innerHTML = `<span><i class="fas fa-eye"></i> ${Number(data.views) || 0}</span><span><i class="fas fa-heart"></i> ${Number(data.likes) || 0}</span>`;
+
+        info.appendChild(badge);
+        info.appendChild(titleEl);
+        info.appendChild(stats);
+
+        const actions = document.createElement('div');
+        actions.className = "item-actions";
+        actions.appendChild(makeIcon("fab fa-whatsapp wa-icon", "", () => window.shareWA(id)));
+        actions.appendChild(makeIcon("fas fa-copy copy-icon", "లింక్ కాపీ చేయి", () => window.copyLink(id, 'id')));
+        actions.appendChild(makeIcon("fas fa-edit edit-icon", "", () => window.editNews(id)));
+        actions.appendChild(makeIcon("fas fa-trash-alt del-icon", "", () => window.deleteNews(id)));
+
+        item.appendChild(info);
+        item.appendChild(actions);
         container.appendChild(item);
     });
 });
@@ -479,20 +889,24 @@ window.copyLink = (id, param) => {
     });
 };
 
-window.shareWA = (id, title) => {
+window.shareWA = (id) => {
+    const title = (newsCache[id] && newsCache[id].title) || "";
     const liveLink = `https://vallibabu15.github.io/news_bytes/?id=${id}`;
     const text = encodeURIComponent(`NB | *${title}*\n\nవార్త ఇక్కడ చూడండి:\n${liveLink}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
 };
 
-window.editNews = (id, title, desc, summary, category, ytUrl) => {
+window.editNews = (id) => {
+    const data = newsCache[id];
+    if (!data) return;
     editID = id;
-    document.getElementById('newsTitle').value = title;
-    document.getElementById('newsDesc').value = desc;
-    document.getElementById('newsSummary').value = summary;
-    document.getElementById('newsCategory').value = category || "తాజా వార్తలు";
-    if (ytUrl) {
-        document.getElementById('newsYtUrl').value = ytUrl;
+    document.getElementById('newsTitle').value = data.title || "";
+    loadIntoEditor(data.desc);
+    document.getElementById('newsSummary').value = data.summary || "";
+    document.getElementById('newsTicker').value = data.ticker || "";
+    document.getElementById('newsCategory').value = data.category || "తాజా వార్తలు";
+    if (data.mediaType === 'youtube' && data.mediaUrl) {
+        document.getElementById('newsYtUrl').value = data.mediaUrl;
         document.getElementById('fileName').innerText = "యూట్యూబ్ వీడియో లింక్ జోడించబడింది";
     }
     document.getElementById('postBtn').innerText = "వార్తను అప్‌డేట్ చేయి";
@@ -506,8 +920,105 @@ window.deleteNews = async (id) => {
     }
 };
 
-// 🚀 Reliable alert: single call to our own Worker (server-side OneSignal call,
-// no public CORS proxy, no exposed REST key). See worker-notify-snippet.js.
+// ============================================================
+// నోటిఫికేషన్ హెడ్డింగ్ బ్లూ రంగులో: వార్త ఫోటో అలాగే ఉంటుంది, దాని కింద సాదా తెల్ల పట్టీ,
+// ఆ పట్టీ మీద వార్త శీర్షిక తిక్ బ్లూ అక్షరాలతో. (షేడింగ్ లేదు; లోగో ఐకాన్ మారదు)
+// ఫోన్ సిస్టమ్ నోటిఫికేషన్ టైటిల్ రంగు మార్చలేం, అందుకే శీర్షికను ఇమేజ్ లోపలే గీస్తున్నాం.
+// రంగు మార్చాలంటే ఈ ఒక్క లైన్ మార్చండి:
+// ============================================================
+const BANNER_BLUE = "#1b2ee6";
+function mixHex(hex, other, t) {
+    const a = parseInt(hex.slice(1), 16), b = parseInt(other.slice(1), 16);
+    const m = (x, y) => Math.round(x + (y - x) * t);
+    const r = m((a >> 16) & 255, (b >> 16) & 255), g = m((a >> 8) & 255, (b >> 8) & 255), bl = m(a & 255, b & 255);
+    return "#" + [r, g, bl].map(v => v.toString(16).padStart(2, "0")).join("");
+}
+
+function loadVisual(source) {
+    return new Promise((resolve, reject) => {
+        if (source.file && source.file.type.startsWith('video')) {
+            const v = document.createElement('video');
+            v.muted = true; v.playsInline = true; v.preload = 'auto';
+            const u = URL.createObjectURL(source.file);
+            v.src = u;
+            v.onloadeddata = () => { v.currentTime = Math.min(1, (v.duration || 1) / 2); };
+            v.onseeked = () => resolve({ el: v, w: v.videoWidth, h: v.videoHeight, revoke: () => URL.revokeObjectURL(u) });
+            v.onerror = () => reject(new Error("video frame load failed"));
+        } else {
+            const img = new Image();
+            let u = null;
+            if (source.file) { u = URL.createObjectURL(source.file); img.src = u; }
+            else { img.crossOrigin = "anonymous"; img.src = source.url; }
+            img.onload = () => resolve({ el: img, w: img.naturalWidth, h: img.naturalHeight, revoke: () => { if (u) URL.revokeObjectURL(u); } });
+            img.onerror = () => reject(new Error("image load failed"));
+        }
+    });
+}
+
+function wrapLines(ctx, text, maxWidth) {
+    const words = text.split(" ");
+    const lines = [];
+    let line = "";
+    words.forEach(w => {
+        const test = line ? line + " " + w : w;
+        if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = w; }
+        else line = test;
+    });
+    if (line) lines.push(line);
+    return lines;
+}
+
+async function generateNotifBanner(source, titleText) {
+    try { await document.fonts.load('900 56px "Noto Sans Telugu"'); } catch (e) {}
+    const vis = await loadVisual(source);
+    try {
+        const W = 1200, H = 600, barH = 175;
+        const canvas = document.createElement("canvas");
+        canvas.width = W; canvas.height = H;
+        const ctx = canvas.getContext("2d");
+
+        // వార్త ఫోటో (మొత్తం బ్యానర్ నిండుగా)
+        const scale = Math.max(W / vis.w, H / vis.h);
+        const dw = vis.w * scale, dh = vis.h * scale;
+        ctx.drawImage(vis.el, (W - dw) / 2, (H - dh) / 2, dw, dh);
+
+        // కింద సాదా తెల్ల పట్టీ (గ్రేడియంట్/షేడ్ లేదు)
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, H - barH, W, barH);
+
+        // శీర్షిక: తిక్ బ్లూ అక్షరాలు, 2 లైన్ల వరకు
+        const maxW = W - 70;
+        let lines = [], size = 60;
+        for (const sz of [60, 54, 48, 42, 36]) {
+            size = sz;
+            ctx.font = `900 ${sz}px "Noto Sans Telugu", Arial, sans-serif`;
+            lines = wrapLines(ctx, titleText, maxW);
+            if (lines.length <= 2) break;
+        }
+        if (lines.length > 2) { lines = lines.slice(0, 2); lines[1] += "..."; }
+
+        ctx.fillStyle = BANNER_BLUE;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        const lh = size * 1.3;
+        const startY = (H - barH) + barH / 2 - ((lines.length - 1) * lh) / 2;
+        const gTop = startY - size * 0.75, gBot = startY + (lines.length - 1) * lh + size * 0.75;
+        const grad = ctx.createLinearGradient(0, gTop, 0, gBot);
+        grad.addColorStop(0, mixHex(BANNER_BLUE, "#ffffff", 0.42));
+        grad.addColorStop(0.45, BANNER_BLUE);
+        grad.addColorStop(1, mixHex(BANNER_BLUE, "#000000", 0.3));
+        ctx.fillStyle = grad;
+        lines.forEach((l, i) => ctx.fillText(l, W / 2, startY + i * lh));
+
+        return await new Promise((resolve, reject) => {
+            canvas.toBlob(b => b ? resolve(b) : reject(new Error("Canvas blob failed")), "image/jpeg", 0.92);
+        });
+    } finally {
+        vis.revoke();
+    }
+}
+
+// Alert: single call to our own Worker (server-side OneSignal call).
 async function sendAlert(payload) {
     try {
         const res = await fetch(NOTIFY_ENDPOINT, {
@@ -530,11 +1041,13 @@ document.getElementById('postBtn').addEventListener('click', async () => {
     const category = document.getElementById('newsCategory').value;
     const title = document.getElementById('newsTitle').value.trim();
     const summary = document.getElementById('newsSummary').value.trim();
-    const desc = document.getElementById('newsDesc').value.trim();
+    const ticker = document.getElementById('newsTicker').value.trim();
+    const descText = editor.innerText.trim();
+    const desc = getCleanHTML();
     const btn = document.getElementById('postBtn');
     const status = document.getElementById('status');
 
-    if (!title || !desc) {
+    if (!title || !descText) {
         alert("టైటిల్ మరియు వివరాలు రాయండి!");
         return;
     }
@@ -570,7 +1083,7 @@ document.getElementById('postBtn').addEventListener('click', async () => {
         }
 
         if (editID) {
-            const updateData = { title, desc, summary, category };
+            const updateData = { title, desc, summary, category, ticker };
             if (mediaUrl) {
                 updateData.mediaUrl = mediaUrl;
                 updateData.mediaType = mediaType;
@@ -587,21 +1100,43 @@ document.getElementById('postBtn').addEventListener('click', async () => {
             }
 
             const newsRef = await addDoc(collection(db, "news"), {
-                title, desc, summary, category, mediaUrl, mediaType,
+                title, desc, summary, category, ticker, mediaUrl, mediaType,
                 views: 0,
+                likes: 0,
                 createdAtMillis: Date.now(),
                 timestamp: serverTimestamp()
             });
 
+            const skipAlert = document.getElementById('noNotify').checked;
+            if (skipAlert) {
+                status.style.color = "green";
+                status.innerText = "వార్త పోస్ట్ అయింది (నోటిఫికేషన్ పంపలేదు) ✓";
+            } else {
             const alertPayload = {
                 headings: { "en": `NB | [${category}] ${title}` },
                 contents: { "en": summary || title },
                 url: `https://vallibabu15.github.io/news_bytes/?id=${newsRef.id}`,
                 chrome_web_icon: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png"
             };
-            if (bannerImg) {
-                alertPayload.big_picture = bannerImg;
-                alertPayload.chrome_web_image = bannerImg;
+            // బ్లూ బ్యానర్ తయారీ; విఫలమైతే పాత పద్ధతిలో వార్త ఫోటోనే వెళ్తుంది
+            let notifBanner = bannerImg;
+            const blueHeadingOn = document.getElementById('blueHeading').checked;
+            if (blueHeadingOn) try {
+                status.innerText = "నోటిఫికేషన్ బ్యానర్ (బ్లూ హెడ్డింగ్) తయారవుతోంది...";
+                const bannerSource = (mediaType !== "youtube" && mediaFile) ? { file: mediaFile } : { url: bannerImg };
+                const bannerBlob = await generateNotifBanner(bannerSource, title);
+                const bFd = new FormData();
+                bFd.append("file", bannerBlob, "notif-banner.jpg");
+                const bRes = await fetch(R2_UPLOAD_ENDPOINT, { method: "POST", body: bFd });
+                const bData = await bRes.json();
+                if (bRes.ok && bData.secure_url) notifBanner = bData.secure_url;
+                else console.warn("Banner upload failed, using news photo", bData);
+            } catch (bannerErr) {
+                console.warn("Blue banner failed, using news photo:", bannerErr);
+            }
+            if (notifBanner) {
+                alertPayload.big_picture = notifBanner;
+                alertPayload.chrome_web_image = notifBanner;
             }
 
             status.innerText = "ఫాలోయర్స్‌కి అలెర్ట్ పంపుతోంది...";
@@ -616,16 +1151,21 @@ document.getElementById('postBtn').addEventListener('click', async () => {
                 status.style.color = "#cc8800";
                 status.innerText = `వార్త పోస్ట్ అయింది, కానీ అలెర్ట్ పంపడంలో సమస్య వచ్చింది. Worker సెటప్ చెక్ చేయండి.`;
             }
+            }
         }
 
         document.getElementById('newsTitle').value = "";
-        document.getElementById('newsDesc').value = "";
+        editor.innerHTML = "<p><br></p>";
         document.getElementById('newsSummary').value = "";
+        document.getElementById('newsTicker').value = "";
         document.getElementById('newsMedia').value = "";
         document.getElementById('newsYtUrl').value = "";
         document.getElementById('fileName').innerText = "ఫైల్ ఎంచుకోండి (ఫోటో / వీడియో)";
         document.getElementById('postBtn').innerText = "పబ్లిష్ & అలెర్ట్ పంపు";
+        document.getElementById('formTitle').innerText = "కొత్త వార్త పోస్ట్ చేయండి";
         editID = null;
+        document.getElementById('noNotify').checked = false;
+        loadSubscribers();
 
     } catch (e) {
         status.style.color = "red";
@@ -635,6 +1175,10 @@ document.getElementById('postBtn').addEventListener('click', async () => {
         setTimeout(() => { status.style.display = "none"; }, 6000);
     }
 });
+
+const blueChk = document.getElementById('blueHeading');
+blueChk.checked = localStorage.getItem('nb_blue_heading') === '1';
+blueChk.addEventListener('change', () => localStorage.setItem('nb_blue_heading', blueChk.checked ? '1' : '0'));
 
 let currentAdImageUrl = "";
 
