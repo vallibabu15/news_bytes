@@ -204,14 +204,12 @@ select { cursor: pointer; }
 .rt-toolbar .row-break { flex-basis: 100%; height: 0; }
 .rt-btn { background: #fff; border: 1px solid #ccc; border-radius: 6px; padding: 6px 10px; font-size: 13px; cursor: pointer; font-weight: bold; color: #333; min-width: 34px; font-family: 'Noto Sans Telugu', sans-serif; }
 .rt-btn:active { background: #e6e6e6; }
-.rt-btn.blue { background: #1b2ee6; color: #fff; border-color: #1b2ee6; }
 .rt-btn.h1 { background: #222; color: #fff; border-color: #222; }
 .rt-btn.h2 { background: #d32f2f; color: #fff; border-color: #d32f2f; }
 .rt-toolbar select.rt-select { width: auto; max-width: 150px; padding: 6px; font-size: 13px; font-weight: 600; border: 1px solid #ccc; border-radius: 6px; background: #fff; }
 .rt-toolbar input.rt-color { width: 38px; height: 32px; padding: 0; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; box-shadow: none; }
-.swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #bbb; cursor: pointer; }
 .rt-label { font-size: 12px; color: #666; font-weight: bold; margin: 0; }
-.swatch { width: 30px; height: 30px; transition: 0.15s; position: relative; background-image: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.65), rgba(255,255,255,0) 55%); }
+.swatch { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px #bbb; cursor: pointer; transition: 0.15s; position: relative; background-image: radial-gradient(circle at 32% 26%, rgba(255,255,255,0.65), rgba(255,255,255,0) 55%); }
 .swatch.on { transform: scale(1.22); box-shadow: 0 0 0 3px #fff, 0 0 0 5px #111, 0 0 12px 3px rgba(0,0,0,0.3); }
 .swatch.on::after { content: "✓"; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; font-weight: 900; }
 @supports (color: color-mix(in srgb, red 50%, blue)) {
@@ -220,6 +218,8 @@ select { cursor: pointer; }
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
 }
+/* స్పష్టంగా మామూలు రంగు ఎంచుకున్న భాగం, పైనున్న రంగు గ్లాస్ ప్రభావం వారసత్వంగా తీసుకోకుండా */
+#newsDesc span[style*="color"]:not([style*="--c"]) { -webkit-text-fill-color: currentcolor; }
 .rt-btn.on { background: #ffe066; border-color: #e0a800; box-shadow: 0 0 0 3px rgba(255,190,0,0.5); }
 .rt-preview { min-width: 70px; height: 36px; padding: 0 12px; border: 1.5px solid #bbb; border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333; }
 #newsDesc { color: #333; border: 1.5px solid #dcdfe6; border-radius: 0 0 12px 12px; padding: 12px; min-height: 240px; font-size: 17px; line-height: 1.7; font-weight: 400; outline: none; overflow-wrap: anywhere; resize: vertical; overflow: auto; background: #fff; }
@@ -234,7 +234,7 @@ select { cursor: pointer; }
     <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh2mta9Iy8-4mBSEIR9zBP3rQegrCAOnmCWv8AIs8Y1a9MYgBWIzg7IcajCAH_wmEXmfsyglaEELRXheyQFqlm-PHMmDpppi-aDuNEgCYEK5Dc_kSmjoFgoIyUpD44Ke26C3LzVrt00pD9VC00P5I7wgf8jssacWWdE3xbu609hb5qpOGh3NlKjyCPyn7yg/s1844/106383.png">
 </div>
 
-<div style="font-size:12px; color:#1f4fe0; font-weight:700; text-align:center; margin:-6px 0 10px;">వెర్షన్ v3.3 · గ్లాస్ రంగులు</div>
+<div style="font-size:12px; color:#1f4fe0; font-weight:700; text-align:center; margin:-6px 0 10px;">వెర్షన్ v3.4 · కలర్ + బోల్డ్ ఫిక్స్</div>
 
 <div class="admin-card">
     <i class="fas fa-sync close-icon" onclick="location.reload()" title="రీఫ్రెష్ చేయండి"></i>
@@ -300,7 +300,7 @@ select { cursor: pointer; }
                 <option value="">సైజ్</option>
                 <option value="14">14</option><option value="16">16</option><option value="17">17 (మామూలు)</option><option value="18">18</option><option value="20">20</option><option value="22">22</option><option value="24">24</option><option value="28">28</option><option value="32">32</option><option value="36">36</option><option value="42">42</option><option value="48">48</option>
             </select>
-            <button type="button" class="rt-btn" id="btnBold" title="లావు అక్షరాలు"><b>B</b></button>
+            <button type="button" class="rt-btn" id="btnBold" title="లావు అక్షరాలు (బోల్డ్)"><b>B</b></button>
             <select class="rt-select" id="fontSel" title="ఫాంట్">
                 <option value="">ఫాంట్</option>
                 <option value="Noto Sans Telugu">Noto Sans Telugu</option>
@@ -323,7 +323,6 @@ select { cursor: pointer; }
             <input type="color" class="rt-color" id="colorPick" value="#e0102f" title="ఇతర రంగు ఎంచుకోండి">
             <span class="row-break"></span>
 
-            <button type="button" class="rt-btn blue" id="btnBlue" title="నీలి రంగు హైలైట్ (పాత Bold)">నీలి B</button>
             <button type="button" class="rt-btn" id="btnClear" title="ఫార్మాటింగ్ తీసేయి">Clear</button>
         </div>
 
@@ -451,9 +450,13 @@ loadSubscribers();
 
 // ============================================================
 // రిచ్ టెక్స్ట్ ఎడిటర్
+//  - ఒకే బోల్డ్ బటన్ (B). రంగు + బోల్డ్ రెండూ కలిసి పనిచేస్తాయి.
+//  - ఏ రంగు నొక్కినా అదే పని: ఆ రంగు వర్తిస్తుంది (సెలెక్షన్ ఉంటే సెలెక్ట్ చేసిన అక్షరాలకు,
+//    లేకపోతే ఇకపై టైప్ చేసే అక్షరాలకు).
 // ============================================================
 const editor = document.getElementById('newsDesc');
 const toolbar = document.getElementById('toolbar');
+const ZW = '\u200B';   // కర్సర్ దగ్గర ఫార్మాట్ నిలబెట్టే కనిపించని అక్షరం (సేవ్ చేసేటప్పుడు తీసేస్తాం)
 let savedRange = null;
 
 try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {}
@@ -497,30 +500,110 @@ editor.addEventListener('paste', (e) => {
     if (html) document.execCommand('insertHTML', false, html);
 });
 
+function styleCSS() { document.execCommand('styleWithCSS', false, true); }
+
 function cmd(name, val) {
     restoreSel();
-    document.execCommand('styleWithCSS', false, true);
+    styleCSS();
     document.execCommand(name, false, val || null);
     saveSel();
 }
 
-document.getElementById('btnBold').addEventListener('click', () => {
-    cmd('bold');
-    setTimeout(updateToolbarState, 0);
-});
+function selIsCollapsed() {
+    const sel = window.getSelection();
+    return !sel.rangeCount || sel.isCollapsed;
+}
 
-document.getElementById('btnBlue').addEventListener('click', () => {
+// కర్సర్ ఉన్న ఎలిమెంట్
+function caretEl() {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return null;
+    let n = sel.anchorNode;
+    if (!n || !editor.contains(n)) return null;
+    if (n.nodeType === 3) n = n.parentElement;
+    return n;
+}
+
+// సెలెక్షన్ లేకుండా (కేవలం కర్సర్ ఉన్నప్పుడు) ఫార్మాట్: కొత్త span లో కనిపించని అక్షరం పెట్టి, కర్సర్ దాని లోపల ఉంచుతాం.
+// ఇకపై టైప్ చేసేవి ఆ span లోనే వస్తాయి. ఇదే span కు రంగు, బోల్డ్ రెండూ కలిసి చేరతాయి.
+function typingSpan(styles) {
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    const r = sel.getRangeAt(0);
+    let host = r.startContainer;
+    if (host.nodeType === 3) host = host.parentElement;
+    let span;
+    if (host && host !== editor && host.tagName === 'SPAN' && host.textContent === ZW) {
+        span = host;                       // ఇప్పటికే ఖాళీ ఫార్మాట్ span లో ఉన్నాం: అదే మార్చేద్దాం
+        Object.assign(span.style, styles);
+    } else {
+        span = document.createElement('span');
+        Object.assign(span.style, styles);
+        span.appendChild(document.createTextNode(ZW));
+        r.insertNode(span);
+    }
+    const nr = document.createRange();
+    nr.setStart(span.firstChild, 1);
+    nr.collapse(true);
+    sel.removeAllRanges();
+    sel.addRange(nr);
+}
+
+// ---------- బోల్డ్ (ఒకే బటన్) ----------
+function applyBold() {
     restoreSel();
-    document.execCommand('styleWithCSS', false, false);
-    document.execCommand('bold');
-    document.execCommand('styleWithCSS', false, true);
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    if (sel.isCollapsed) {
+        const el = caretEl();
+        const isB = el ? parseInt(getComputedStyle(el).fontWeight, 10) >= 600 : false;
+        typingSpan({ fontWeight: isB ? 'normal' : 'bold' });
+    } else {
+        styleCSS();
+        document.execCommand('bold');
+    }
+    annotateColors();
     saveSel();
-});
+    setTimeout(updateToolbarState, 0);
+}
+document.getElementById('btnBold').addEventListener('click', applyBold);
 
+// ---------- రంగు (ప్రతి రంగు, కలర్ పికర్ — అన్నీ ఇదే ఫంక్షన్) ----------
+function applyColor(hex) {
+    restoreSel();
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    if (sel.isCollapsed) {
+        typingSpan({ color: hex });
+    } else {
+        styleCSS();
+        document.execCommand('foreColor', false, hex);
+    }
+    annotateColors();
+    saveSel();
+    setTimeout(updateToolbarState, 0);
+}
+
+// ---------- Clear ----------
 document.getElementById('btnClear').addEventListener('click', () => {
     restoreSel();
-    document.execCommand('removeFormat');
+    const sel = window.getSelection();
+    if (!sel.rangeCount) return;
+    if (sel.isCollapsed) {
+        typingSpan({ color: DEFAULT_TEXT_COLOR, fontWeight: 'normal' });
+    } else {
+        document.execCommand('removeFormat');
+        const r = sel.getRangeAt(0);
+        editor.querySelectorAll('span').forEach(sp => {
+            if (!r.intersectsNode(sp)) return;
+            sp.style.color = ''; sp.style.fontWeight = ''; sp.style.fontSize = ''; sp.style.fontFamily = '';
+            sp.style.removeProperty('--c');
+            if (!(sp.getAttribute('style') || '').trim()) sp.removeAttribute('style');
+        });
+    }
+    annotateColors();
     saveSel();
+    setTimeout(updateToolbarState, 0);
 });
 
 let pendingSize = null;
@@ -539,8 +622,13 @@ function fixSizeSpans(px) {
 }
 
 document.getElementById('fontSel').addEventListener('change', (e) => {
-    if (e.target.value) cmd('fontName', e.target.value);
+    const name = e.target.value;
     syncLockUntil = Date.now() + 700;
+    if (!name) return;
+    restoreSel();
+    if (selIsCollapsed()) typingSpan({ fontFamily: "'" + name + "'" });
+    else cmd('fontName', name);
+    saveSel();
 });
 
 document.getElementById('sizeSel').addEventListener('change', (e) => {
@@ -549,9 +637,14 @@ document.getElementById('sizeSel').addEventListener('change', (e) => {
     pendingSize = px;
     syncLockUntil = Date.now() + 700;
     restoreSel();
-    document.execCommand('styleWithCSS', false, true);
-    document.execCommand('fontSize', false, '7');
-    fixSizeSpans(px);
+    if (selIsCollapsed()) {
+        typingSpan({ fontSize: px + 'px' });
+    } else {
+        styleCSS();
+        document.execCommand('fontSize', false, '7');
+        fixSizeSpans(px);
+    }
+    annotateColors();
     saveSel();
 });
 
@@ -574,7 +667,7 @@ const ROYAL_COLORS = [
 ];
 
 const colorPick = document.getElementById('colorPick');
-colorPick.addEventListener('input', () => cmd('foreColor', colorPick.value));
+colorPick.addEventListener('change', () => applyColor(colorPick.value));
 
 const swatchBox = document.getElementById('swatchBox');
 const DEFAULT_TEXT_COLOR = "#333333";
@@ -595,11 +688,14 @@ editor.addEventListener('input', annotateColors);
 function updateToolbarState() {
     const sel = window.getSelection();
     if (!sel.rangeCount || !editor.contains(sel.anchorNode)) return;
-    let cur = "";
-    try { cur = norm(document.queryCommandValue('foreColor')); } catch (e) {}
+    let el = sel.anchorNode;
+    if (el.nodeType === 3) el = el.parentElement;
+    if (!el || !editor.contains(el)) return;
+    const cs = getComputedStyle(el);
+    const cur = norm(cs.color);
+    const bold = parseInt(cs.fontWeight, 10) >= 600;
+
     swatchEls.forEach(sw => sw.classList.toggle('on', sw.dataset.rgb === cur));
-    let bold = false;
-    try { bold = document.queryCommandState('bold'); } catch (e) {}
     document.getElementById('btnBold').classList.toggle('on', bold);
 
     // ఖాళీ బాక్స్: ఎంచుకున్న రంగు, లావు ఇలా వస్తుందని చూపిస్తుంది
@@ -612,17 +708,12 @@ function updateToolbarState() {
     }
 
     if (Date.now() >= syncLockUntil) {
-        let el = sel.anchorNode;
-        if (el && el.nodeType === 3) el = el.parentElement;
-        if (el && editor.contains(el)) {
-            const cs = getComputedStyle(el);
-            const px = String(Math.round(parseFloat(cs.fontSize)));
-            const sizeSel = document.getElementById('sizeSel');
-            sizeSel.value = [...sizeSel.options].some(o => o.value === px) ? px : "";
-            const fam = cs.fontFamily.split(',')[0].replace(/["']/g, '').trim();
-            const fontSel = document.getElementById('fontSel');
-            fontSel.value = [...fontSel.options].some(o => o.value === fam) ? fam : "";
-        }
+        const px = String(Math.round(parseFloat(cs.fontSize)));
+        const sizeSel = document.getElementById('sizeSel');
+        sizeSel.value = [...sizeSel.options].some(o => o.value === px) ? px : "";
+        const fam = cs.fontFamily.split(',')[0].replace(/["']/g, '').trim();
+        const fontSel = document.getElementById('fontSel');
+        fontSel.value = [...fontSel.options].some(o => o.value === fam) ? fam : "";
     }
 }
 
@@ -633,19 +724,8 @@ ROYAL_COLORS.forEach(col => {
     sw.style.backgroundColor = col.show || col.c;
     sw.dataset.rgb = norm(hexToRgb(col.c));
     sw.addEventListener('click', () => {
-        restoreSel();
-        let cur = "";
-        try { cur = norm(document.queryCommandValue('foreColor')); } catch (e) {}
-        const wasOn = (cur === sw.dataset.rgb);
-        if (wasOn) {
-            cmd('foreColor', DEFAULT_TEXT_COLOR);      // మళ్ళీ నొక్కితే: మామూలు అక్షరాలు
-        } else {
-            colorPick.value = col.c;
-            cmd('foreColor', col.c);                   // నొక్కితే: ఈ రంగులో అక్షరాలు
-        }
-        annotateColors();
-        swatchEls.forEach(x => x.classList.toggle('on', x === sw && !wasOn));
-        setTimeout(updateToolbarState, 0);
+        colorPick.value = col.c;
+        applyColor(col.c);        // ప్రతి రంగుకూ ఒకే పని: ఆ రంగు వర్తింపజేయడం
     });
     swatchEls.push(sw);
     swatchBox.appendChild(sw);
@@ -712,6 +792,10 @@ editor.addEventListener('beforeinput', (e) => {
 
 function getCleanHTML() {
     const clone = editor.cloneNode(true);
+    // ఖాళీగా మిగిలిన ఫార్మాట్ span లు తీసేయి
+    clone.querySelectorAll('span').forEach(sp => {
+        if (!sp.textContent.replace(/\u200B/g, '') && !sp.querySelector('br,img')) sp.remove();
+    });
     clone.querySelectorAll('div').forEach(d => {
         const p = document.createElement('p');
         p.innerHTML = d.innerHTML;
@@ -728,10 +812,10 @@ function getCleanHTML() {
             cur.appendChild(n);
         }
     });
-    while (out.lastChild && out.lastChild.nodeType === 1 && !out.lastChild.textContent.trim() && !out.lastChild.querySelector('img')) {
+    while (out.lastChild && out.lastChild.nodeType === 1 && !out.lastChild.textContent.replace(/\u200B/g, '').trim() && !out.lastChild.querySelector('img')) {
         out.removeChild(out.lastChild);
     }
-    return out.innerHTML;
+    return out.innerHTML.replace(/\u200B/g, '');
 }
 
 function loadIntoEditor(desc) {
@@ -740,6 +824,15 @@ function loadIntoEditor(desc) {
         desc = desc.split(/\n+/).filter(l => l.trim()).map(l => '<p>' + l + '</p>').join('');
     }
     editor.innerHTML = desc || '<p><br></p>';
+    // పాత వార్తల్లోని <b> (నీలి బోల్డ్) ని ఇప్పటి పద్ధతిలోకి మార్చడం: లావు + నీలి రంగు
+    editor.querySelectorAll('b, strong').forEach(b => {
+        const s = document.createElement('span');
+        s.style.fontWeight = 'bold';
+        s.style.color = '#1b2ee6';
+        s.innerHTML = b.innerHTML;
+        b.replaceWith(s);
+    });
+    annotateColors();
 }
 
 // ============================================================
@@ -1042,7 +1135,7 @@ document.getElementById('postBtn').addEventListener('click', async () => {
     const title = document.getElementById('newsTitle').value.trim();
     const summary = document.getElementById('newsSummary').value.trim();
     const ticker = document.getElementById('newsTicker').value.trim();
-    const descText = editor.innerText.trim();
+    const descText = editor.innerText.replace(/\u200B/g, '').trim();
     const desc = getCleanHTML();
     const btn = document.getElementById('postBtn');
     const status = document.getElementById('status');
