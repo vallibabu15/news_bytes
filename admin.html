@@ -422,6 +422,33 @@ const SUBS_ENDPOINT = "https://newsbytes-upload.vallibabu15.workers.dev/subscrib
 let editID = null;
 const newsCache = {};
 
+// ఫోటో అప్‌లోడ్ చేసే ముందు చిన్నదిగా చేయడం (పెద్ద ఫోటోల వల్లే పబ్లిక్ పేజీ స్లోగా లోడ్ అవుతుంది).
+// 1600px కి మించిన ఫోటోలు తగ్గిస్తుంది; ఇప్పటికే చిన్నవి / GIF / SVG అలాగే వెళ్తాయి; ఏదైనా విఫలమైతే అసలు ఫోటోనే వెళ్తుంది.
+async function compressImage(file, maxDim = 1600, quality = 0.85) {
+    let url = null;
+    try {
+        if (!file || !file.type || !file.type.startsWith('image/') || /gif|svg/i.test(file.type)) return file;
+        if (file.size < 350 * 1024) return file;
+        url = URL.createObjectURL(file);
+        const img = await new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = url; });
+        const s = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+        const w = Math.round(img.naturalWidth * s), h = Math.round(img.naturalHeight * s);
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        const blob = await new Promise(r => c.toBlob(r, 'image/jpeg', quality));
+        if (!blob || blob.size >= file.size) return file;
+        return new File([blob], (file.name || 'photo').replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+    } catch (e) {
+        return file;
+    } finally {
+        if (url) URL.revokeObjectURL(url);
+    }
+}
+
 function extractYouTubeId(url) {
     if (!url) return null;
     const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
@@ -941,7 +968,7 @@ document.getElementById('jokePostBtn').addEventListener('click', async () => {
 
     try {
         const formData = new FormData();
-        formData.append("file", jokeFile);
+        formData.append("file", await compressImage(jokeFile));
 
         const res = await fetch(R2_UPLOAD_ENDPOINT, { method: "POST", body: formData });
         const cloudData = await res.json();
@@ -1165,7 +1192,7 @@ document.getElementById('postBtn').addEventListener('click', async () => {
             status.innerText = isVideo ? "వీడియో అప్‌లోడ్ అవుతోంది..." : "ఫోటో అప్‌లోడ్ అవుతోంది...";
 
             const formData = new FormData();
-            formData.append("file", mediaFile);
+            formData.append("file", isVideo ? mediaFile : await compressImage(mediaFile));
 
             const res = await fetch(R2_UPLOAD_ENDPOINT, { method: "POST", body: formData });
             const cloudData = await res.json();
@@ -1309,7 +1336,7 @@ document.getElementById('adSaveBtn').addEventListener('click', async () => {
         if (adFile) {
             status.innerText = "యాడ్ ఫోటో అప్‌లోడ్ అవుతోంది...";
             const formData = new FormData();
-            formData.append("file", adFile);
+            formData.append("file", await compressImage(adFile));
 
             const res = await fetch(R2_UPLOAD_ENDPOINT, { method: "POST", body: formData });
             const cloudData = await res.json();
