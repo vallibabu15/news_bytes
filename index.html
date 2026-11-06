@@ -14,6 +14,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anek+Telugu:wght@400;700;800&family=Gidugu&family=Hind+Guntur:wght@400;700&family=Mandali&family=Noto+Sans+Telugu:wght@400;600;700;800;900&family=NTR&family=Ponnala&family=Ramabhadra&family=Suranna&family=Tenali+Ramakrishna&display=swap" rel="stylesheet">
 
+<!-- వేగంగా లోడ్ కోసం: ఫైర్‌బేస్ ఫైళ్లను ముందే తెప్పించడం -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js">
+
 <!-- Light YouTube API Setup -->
 <script>
 window.ytApiReady = false;
@@ -101,7 +107,7 @@ html, body {
 }
 .sound-btn.sound-on { background: #ff0000 !important; box-shadow: 0 0 16px rgba(255,0,0,0.9) !important; }
 
-.news-content { padding: 12px 16px 6px 16px; flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+.news-content { padding: 12px 16px 6px 16px; flex-grow: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; min-height: 0; }
 
 .news-media.has-ticker .sound-btn { bottom: 46px; }
 .news-media.has-ticker img,
@@ -133,20 +139,18 @@ html, body {
   margin: 0 0 8px 0; line-height: 1.35; flex-shrink: 0;
 }
 
-/* వివరణ: ఎడిటర్‌లో రాసినట్టే పేరాగ్రాఫ్‌లు, రంగులు, సైజ్‌లు */
+/* వివరణ: ఎడిటర్‌లో రాసినట్టే పేరాగ్రాఫ్‌లు, రంగులు, సైజ్‌లు.
+   (-webkit-line-clamp తీసేశాం: అది బహుళ పేరాగ్రాఫ్‌లతో అక్షరాలు ఒకదానిపై ఒకటి పడేలా చేస్తోంది.
+    ఇప్పుడు ఎత్తు పరిమితి + కింద మసక ఫేడ్ ఉంటుంది) */
 .news-desc {
   font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif;
-  font-size: 15.5px; color: #333; line-height: 1.6; text-align: justify; margin: 0;
-  flex-grow: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; -webkit-box-orient: vertical;
+  font-size: 15.5px; color: #333; line-height: 1.6; text-align: left; margin: 0;
+  display: block; flex: 1 1 0; min-height: 0; overflow: hidden; position: relative;
+  overflow-wrap: anywhere;
 }
 .news-desc p, .full-body p { margin: 0 0 8px 0; }
 .full-body p { margin-bottom: 14px; }
 .news-desc p:last-child, .full-body p:last-child { margin-bottom: 0; }
-.news-desc b, .full-body b {
-  color: #1b2ee6; font-weight: 900;
-  background: linear-gradient(180deg, #6c80ff 0%, #1b2ee6 48%, #0d17a8 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
 /* ఎడిటర్‌లో ఎంచుకున్న ప్రతి రంగు గ్లాస్ ఫినిష్ తో (పై భాగం మెరుపు, కింద గాఢత) */
 @supports (color: color-mix(in srgb, red 50%, blue)) {
   .news-desc [style*="--c"], .full-body [style*="--c"] {
@@ -154,10 +158,14 @@ html, body {
     -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
   }
 }
-.full-body { font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif; font-size: 16.5px; line-height: 1.8; color: #333; margin-top: 10px; }
+/* మామూలు (నలుపు) రంగు ఎంచుకున్న భాగం, పై రంగు గ్లాస్ ప్రభావాన్ని వారసత్వంగా తీసుకోకుండా */
+.news-desc span[style*="color"]:not([style*="--c"]), .full-body span[style*="color"]:not([style*="--c"]) {
+  -webkit-text-fill-color: currentcolor;
+}
+.full-body { font-family: 'Noto Sans Telugu', 'Segoe UI', Roboto, Arial, sans-serif; font-size: 16.5px; line-height: 1.8; color: #333; margin-top: 10px; overflow-wrap: anywhere; }
 
 @keyframes sharp-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
-.card-footer-bar { height: 44px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; margin-top: auto; padding-top: 4px; position: relative; z-index: 50; }
+.card-footer-bar { height: 44px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; margin-top: auto; padding-top: 4px; position: relative; z-index: 50; background: #fff; }
 .read-more-btn {
   background: #fff; border: none; padding: 6px 10px 6px 0; font-size: 17px; font-weight: 900;
   color: #ff0000; cursor: pointer; z-index: 500 !important; animation: sharp-blink 1.2s infinite ease-in-out;
@@ -220,8 +228,9 @@ html, body {
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import {
-  getFirestore, collection, query, orderBy, limit, startAfter,
-  getDocs, getDoc, doc, onSnapshot, updateDoc, increment
+  getFirestore, initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  collection, query, orderBy, limit, startAfter,
+  getDocs, getDocsFromCache, getDoc, doc, onSnapshot, updateDoc, increment
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -233,7 +242,13 @@ const firebaseConfig = {
   appId: "1:26695955001:web:0c25b74d7a849f4a9d13e8"
 };
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// ఒకసారి చూసిన వార్తలు ఫోన్‌లో సేవ్ అవుతాయి: నెట్ లేకపోయినా / స్లోగా ఉన్నా వెంటనే తెరుచుకుంటాయి
+let db;
+try {
+  db = initializeFirestore(app, { localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }) });
+} catch (e) {
+  db = getFirestore(app);
+}
 
 const NEWS_PAGE_SIZE = 6;
 const JOKE_EVERY = 6;
@@ -281,6 +296,8 @@ function escapeHtml(str) {
 // ============================================================
 // వివరణ శుభ్రం చేయడం: ఎడిటర్‌లో చేసిన ఫార్మాటింగ్ (పేరాగ్రాఫ్, రంగు, సైజ్, ఫాంట్, లావు)
 // మాత్రమే అనుమతిస్తాం. స్క్రిప్ట్‌లు, లింకులు, ఇతర ట్యాగ్‌లు తీసేస్తాం.
+// పాత వార్తల్లోని <b>/<strong> (పాత "నీలి B") ని: లావు + నీలి రంగు span గా మారుస్తాం,
+// కాబట్టి పాత వార్తలు అదే రూపంలో కనిపిస్తాయి, కొత్త రంగులు దానిపై ఓవర్‌రైడ్ కావు.
 // ============================================================
 const SAFE_FONTS = ['Noto Sans Telugu','Anek Telugu','Hind Guntur','Ramabhadra','Mandali','Ponnala','Suranna','NTR','Gidugu','Tenali Ramakrishna','Arial','Georgia'];
 
@@ -309,9 +326,9 @@ function safeStyle(styleText) {
 }
 
 function sanitizeDesc(html) {
-  const allowed = new Set(['B', 'BR', 'STRONG', 'P', 'SPAN']);
+  const allowed = new Set(['BR', 'P', 'SPAN']);
   const wrap = document.createElement('div');
-  wrap.innerHTML = String(html || "");
+  wrap.innerHTML = String(html || "").replace(/\u200B/g, "");
   (function clean(node) {
     [...node.childNodes].forEach(child => {
       if (child.nodeType !== 1) return;
@@ -322,6 +339,13 @@ function sanitizeDesc(html) {
         if (st) p.setAttribute('style', st);
         child.replaceWith(p);
         child = p;
+      }
+      if (child.tagName === 'B' || child.tagName === 'STRONG') {
+        const sp = document.createElement('span');
+        while (child.firstChild) sp.appendChild(child.firstChild);
+        sp.setAttribute('style', 'font-weight:bold;color:#1b2ee6');
+        child.replaceWith(sp);
+        child = sp;
       }
       if (!allowed.has(child.tagName)) {
         child.replaceWith(document.createTextNode(child.textContent));
@@ -397,8 +421,57 @@ window.fitMedia = function(img) {
       img.style.setProperty('object-fit', 'cover', 'important');
     }
     box.style.setProperty('height', Math.round(h + (box.classList.contains('has-ticker') ? 34 : 0)) + 'px', 'important');
+    fitDesc(box.closest('.news-card'));
   } catch (e) {}
 };
+
+// ============================================================
+// వివరణ నీట్‌గా కట్: స్క్రీన్‌లో పూర్తిగా కనిపించే చివరి లైన్ దగ్గర ఆగుతుంది
+// (సగం కట్ అయిన లైన్, మసక ఫేడ్ ఉండవు). మిగతాది "ఇంకా చదవండి..." లో.
+// ప్రతి ఫోన్ స్క్రీన్ సైజ్‌కి తగ్గట్టు ఆటోమేటిక్‌గా లెక్కిస్తుంది.
+// ============================================================
+function fitDesc(card) {
+  try {
+    const d = card && card.querySelector('.news-desc');
+    if (!d) return;
+    d.style.flex = '1 1 0'; d.style.height = '';
+    const H = d.clientHeight, W = d.clientWidth;
+    if (!H || !W) return;
+    const m = document.createElement('div');
+    m.className = 'news-desc';
+    m.style.cssText = 'position:fixed;left:-9999px;top:0;visibility:hidden;pointer-events:none;flex:none;overflow:visible;height:auto;width:' + W + 'px';
+    m.innerHTML = d.innerHTML;
+    document.body.appendChild(m);
+    const top = m.getBoundingClientRect().top;
+    const rects = [];
+    const range = document.createRange();
+    const walker = document.createTreeWalker(m, NodeFilter.SHOW_TEXT);
+    let n;
+    while ((n = walker.nextNode())) {
+      if (!n.nodeValue.trim()) continue;
+      range.selectNodeContents(n);
+      for (const r of range.getClientRects()) {
+        if (r.height > 0) rects.push({ t: r.top - top, b: r.bottom - top });
+      }
+    }
+    m.remove();
+    if (!rects.length) return;
+    const maxB = Math.max(...rects.map(r => r.b));
+    if (maxB <= H) return;                       // మొత్తం మేటర్ పడుతుంది: కట్ అవసరం లేదు
+    let last = null;
+    rects.forEach(r => { if (r.b <= H && (!last || r.b > last.b)) last = r; });
+    if (!last) return;
+    let nextTop = Infinity;
+    rects.forEach(r => { if (r.t > last.t + (last.b - last.t) * 0.4 && r.b > last.b && r.t < nextTop) nextTop = r.t; });
+    const gap = isFinite(nextTop) ? Math.max(0, Math.min(4, nextTop - last.b)) : 0;
+    d.style.flex = 'none';
+    d.style.height = Math.ceil(last.b + gap) + 'px';
+  } catch (e) {}
+}
+function fitAllDesc() {
+  document.querySelectorAll('.news-card.card-visible').forEach(fitDesc);
+}
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { try { fitAllDesc(); } catch (e) {} });
 
 function createYtPlayer(uid, ytId) {
   const make = () => {
@@ -600,10 +673,27 @@ async function loadNextNewsPage() {
     if (lastNewsDoc) q = query(collection(db, "news"), orderBy("timestamp", "desc"), startAfter(lastNewsDoc), limit(NEWS_PAGE_SIZE));
     else q = query(collection(db, "news"), orderBy("timestamp", "desc"), limit(NEWS_PAGE_SIZE));
 
-    const snap = await getDocs(q);
+    let snap, fromCache = false, serverPromise = null;
+    if (!lastNewsDoc) {
+      // మొదటి పేజీ: సర్వర్ 2.5 సెకన్లలో రాకపోతే / నెట్ లేకపోతే, ఫోన్‌లో సేవ్ అయిన వార్తలు వెంటనే చూపిస్తాం
+      serverPromise = getDocs(q);
+      const quick = await Promise.race([
+        serverPromise.catch(() => null),
+        new Promise(r => setTimeout(() => r('slow'), 2500))
+      ]);
+      if (quick && quick !== 'slow') snap = quick;
+      else {
+        let cached = null;
+        try { cached = await getDocsFromCache(q); } catch (e) {}
+        if (cached && !cached.empty) { snap = cached; fromCache = true; }
+        else snap = await serverPromise;
+      }
+    } else {
+      snap = await getDocs(q);
+    }
     if (snap.empty) { noMoreNews = true; return; }
     lastNewsDoc = snap.docs[snap.docs.length - 1];
-    if (snap.docs.length < NEWS_PAGE_SIZE) noMoreNews = true;
+    if (!fromCache && snap.docs.length < NEWS_PAGE_SIZE) noMoreNews = true;
 
     const wasEmpty = feedItems.length === 0;
     snap.forEach(d => {
@@ -612,6 +702,18 @@ async function loadNextNewsPage() {
       interleaveAppendNews({ id: d.id, ...d.data() });
     });
     if (wasEmpty && feedItems.length > 0) firstItemReady();
+
+    // సేవ్ అయిన వార్తలతో తెరిచినప్పుడు: సర్వర్ నుంచి వచ్చే కొత్త వార్తలను తర్వాత జోడిస్తాం
+    if (fromCache && serverPromise) {
+      serverPromise.then(s => {
+        const fresh = [];
+        s.forEach(d => { if (!knownNewsIds.has(d.id)) fresh.push(d); });
+        fresh.reverse().forEach(d => {
+          knownNewsIds.add(d.id);
+          prependLiveItem({ id: d.id, ...d.data() });
+        });
+      }).catch(() => {});
+    }
   } catch (e) {
     console.error(e);
   } finally {
@@ -689,6 +791,7 @@ function renderCubeAtRest() {
     }
   });
 
+  fitAllDesc();
   updateBottomActions();
   if (feedItems.length - currentIndex <= PREFETCH_MARGIN) loadNextNewsPage();
 }
